@@ -1,0 +1,16 @@
+# Carpeta "src/helpers".
+
+## Explicación Básica
+En ella encontramos un único archivo (globalMethods.js) en el que aparecen funciones de ayuda globales qeu podremos acceder desde cualquier archivo ".vue" (vista o componente).
+Al declarar un método ahí, se podrá acceder desde cualquier archivo ".vue" usando el ya declarado "Vue prototype" -> "$helpers".
+NOTA: importante a la hora de llamar a la función con el $helpers terminar poniendo los paréntesis. Ejemplo: BIEN => $helpers.getUser(), MAL => $helpers.getUser
+
+## Nomenclatura
+Para nombrar las funciones nuevos que creemos se hará en CamelCase y con la primera letra en minúscula (Ejemplo: funcionDeEjemplo())
+
+## Ejemplo
+Si accedemos desde el template del archivo Vue:
+$helpers.getUser() o $helpers.funcionDeEjemplo()
+
+en caso de acceder desde el apartado script del archivo Vue:
+this.$helpers.getUser() o this.$helpers.funcionDeEjemplo()

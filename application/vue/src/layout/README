@@ -1,0 +1,7 @@
+# Carpeta "src/layout".
+
+## Explicación Básica
+En ella encontramos los componentes básicos para que funcionen los diferentes layouts de nuestra aplicación y el archivo ".vue" de cada layout, que hasta ahora son:
+- **Layout:** interfaz por defecto, con el menú en el lateral izquierdo y barra superior sencilla.
+- **FullLayout:** interfaz a pantalla completa, sin menú ni barra superior.
+- **LayoutTopMenu:** interfaz con menú superior. El menú lateral aparecería en tablets y móviles oculto.

@@ -1,0 +1,10 @@
+# Carpeta "src/icons".
+
+## Explicación Básica
+En ella encontramos:
+- **Carpeta "svg":** en la que se guardan todos los iconos SVG de nuestra aplicación.
+- **Archivo "index.js":** en el que se importan todos los archivos de la carpeta "svg".
+
+
+## Nomenclatura
+No hay nomenclatura específica para nombrar los iconos, pero, como norma general, intentar usar CamelCase o snake_case y evitar espacios dentro del nombre.

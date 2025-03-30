@@ -1,0 +1,9 @@
+# Changelog
+
+## v1.4
+- **Improved form-components:** now they have the "label" attribute so there is no need to use "el-form-item" any more.
+- **Improved "after_update" and "before_update" triggers:** now they return also the primary key.
+- **Added new helper classes:** i.e. "full-container-with-padding", modal helpers ("flex-modal-form" and "modal-form-flex-item") and several flexbox helpers
+- **Added new examples for buttons**
+- **Minor Bug fixes**
+- **Minor UX/UI changes:** among them changed Notification for Message on request.js

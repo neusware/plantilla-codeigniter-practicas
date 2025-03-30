@@ -1,0 +1,10 @@
+# Carpeta "src/components".
+
+## Explicación Básica
+En ella encontramos los archivos los componentes que use nuestra aplicación, con una carpeta por cada componente, y el propio componenete en un archivo "index.vue".
+En caso de que un componente tenga subcomponentes, se crearán más archivos ".vue" dentro de esa carpeta, por ejemplo "Schedule.vue" del componente "CustomTasksCalendar"
+
+
+## Nomenclatura
+Para nombrar las carpetas se hará en CamelCase y  no importa si es en singular o en plural.
+El archivo principal del componente será "index.vue" y en caso de necesitar archivos extra, en CamelCase empezando con mayúscula (Ejemplo: "Schedule.vue").

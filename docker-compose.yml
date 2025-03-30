@@ -1,0 +1,59 @@
+version: '2'
+services:
+
+    api:
+      # image: tato469/php7-mysqli-gd:php7.1.9
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: panel_plantilla_codeigniter
+      volumes:
+        -  .:/var/www/html
+      ports:
+        - 4001:80
+        - 4002:443
+      networks:
+        - code-network
+
+    db:
+      image: mysql/mysql-server:5.7.22
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: example
+        MYSQL_USER: plantilla_codeigniter_db_user
+        MYSQL_PASSWORD: 9C4MkxY2
+        MYSQL_DATABASE: plantilla_codeigniter_database
+      volumes:
+        - ./application/sql/dump.sql:/docker-entrypoint-initdb.d/1-dump.sql
+      volumes_from:
+        - datastore
+      networks:
+        - code-network
+      ports:
+        - '13310:3306'
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadmin_plantilla_codeigniter
+      environment:
+        MYSQL_ROOT_PASSWORD: example
+        PMA_USER: plantilla_codeigniter_db_user
+        PMA_PASSWORD: 9C4MkxY2
+        PMA_PORT: 13310
+      links:
+        - db
+      ports:
+        - '8890:80'
+      networks:
+        - code-network
+
+    datastore:
+      image: busybox
+      volumes:
+        - /var/lib/mysql
+      networks:
+        - code-network
+
+networks:
+  code-network:
+    driver: bridge

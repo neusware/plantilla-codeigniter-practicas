@@ -1,0 +1,131 @@
+#app
+  // 主体区域
+  .main-container
+    min-height: 100%
+    transition: margin-left .28s
+    margin-left: var(--sidebar-width)
+
+  .app-wrapper.mobile:not(.hideSidebar)
+    position: fixed
+
+  // 侧边栏
+  .sidebar-container
+    transition: width 0.28s
+    width: var(--sidebar-width) !important
+    height: 100%
+    position: fixed
+    font-size: 0px
+    top: 0
+    bottom: 0
+    left: 0
+    z-index: 800
+    overflow: hidden
+    // border-right: 7px solid #51081a
+
+    ul.main-sidebar.el-menu
+      background: var(--menu-bg) !important
+
+    //reset element-ui css
+    .horizontal-collapse-transition
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out
+    .scrollbar-wrapper
+      height: calc(100% + 15px)
+      .el-scrollbar__view
+        height: 100%
+
+    .is-horizontal
+      display: none
+    a
+      display: inline-block
+      width: 100%
+      overflow: hidden
+
+    .svg-icon
+      margin-right: 16px
+      margin-left: 20px
+    .el-menu::after, .el-menu::before
+      display: none !important
+    .el-menu
+      border: none
+      height: 100%
+      width: 100% !important
+
+  // body:not(.has-topbar)
+  .hideSidebar
+    .main-sidebar
+    .sidebar-container
+      width: var(--minimized-sidebar-width) !important
+
+      .submenu-title-noDropdown
+        padding-left: 10px !important
+        position: relative
+        .el-tooltip
+          padding: 0 !important
+
+      .el-submenu
+        overflow: hidden
+        &>.el-submenu__title
+          font-size: 17px !important
+          padding: 0 !important
+          .el-submenu__icon-arrow
+            display: none
+
+    .main-container
+      margin-left: var(--minimized-sidebar-width)
+
+    .main-sidebar.el-menu--collapse
+      .el-submenu
+        &>.el-submenu__title
+          &>span
+            height: 0
+            width: 0
+            overflow: hidden
+            visibility: hidden
+            display: inline-block
+
+  .sidebar-container .nest-menu .el-submenu>.el-submenu__title.is-active,
+  .sidebar-container .el-submenu .el-menu-item.is-active,
+  .sidebar-container .el-submenu.is-active:not(.is-opened) > .el-submenu__title
+    background: var(--menu-item-selected) !important
+    // color: #EEE !important
+  .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
+  .sidebar-container .el-submenu .el-menu-item
+    min-width: var(--sidebar-width) !important
+    background-color: var(--sub-menu-bg) !important
+    &:hover
+      background-color: var(--menu-hover) !important
+
+  .el-menu--collapse .el-menu .el-submenu
+    min-width: var(--sidebar-width) !important
+
+  //适配移动端
+  .mobile
+    .main-container
+      margin-left: 0px
+    .sidebar-container
+      transition: transform .28s
+      width: var(--sidebar-width) !important
+    &.hideSidebar
+      .sidebar-container
+        transition-duration: 0.3s
+        transform: translate3d(-300px, 0, 0) // -300px => -(var(--sidebar-width))
+
+  .withoutAnimation
+    .main-container,
+    .sidebar-container
+      transition: none
+
+.el-menu--vertical
+  background: var(--menu-bg) !important
+  ul.el-menu
+    background: var(--sub-menu-bg) !important
+    margin: 0
+    padding: 0
+    a > li.el-menu-item.is-active
+      background: var(--menu-item-selected) !important
+      color: #EEE !important
+    a > li.el-menu-item
+      background: var(--sub-menu-bg) !important
+
+      &:hover
+        background: var(--menu-hover) !important

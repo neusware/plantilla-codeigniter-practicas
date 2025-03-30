@@ -1,0 +1,68 @@
+@keyframes tadaa
+  0%
+    transform: scale3d(1, 1, 1)
+  10%, 20%
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg)
+  30%, 50%, 70%, 90%
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)
+  40%, 60%, 80%
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg)
+  100%
+    transform: scale3d(1, 1, 1)
+
+@keyframes rotating
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)
+
+@keyframes blink
+  0%
+    box-shadow: 0 0 8px orange
+  50%
+    box-shadow: none
+  100%
+    box-shadow: 0 0 8px orange
+
+@keyframes flickerAnimation
+  0%
+    opacity: 1
+  50%
+    opacity: 0
+  100%
+    opacity: 1
+
+@keyframes flickerWithTadaAnimation
+  0%
+    transform: scale3d(1, 1, 1)
+    opacity: 1
+  10%, 20%
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -10deg)
+  30%, 50%, 70%, 90%
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 10deg)
+  50%
+    opacity: 0
+  40%, 60%, 80%
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -10deg)
+  100%
+    transform: scale3d(1, 1, 1)
+    opacity: 1
+
+.tada-animation
+  animation: tadaa 1.5s both infinite
+  // animation-name: tadaa
+  // animation-duration: 1.5s
+  // animation-fill-mode: both
+  // animation-iteration-count: infinite
+
+.rotate-animation
+  animation: rotating 1s linear infinite
+
+.blink-shadow
+  animation: blink 1.5s linear infinite
+
+.flicker-animation
+  animation: flickerAnimation 1.5s infinite
+
+.flicker-with-tada-animation
+  animation: flickerWithTadaAnimation 1.5s infinite

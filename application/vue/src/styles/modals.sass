@@ -1,0 +1,84 @@
+$breakpoint-phones: 480px
+
+// Estilos globales para los dialogs
+.vue-dialog
+  font-family: roboto, Helvetica Neue, Helvetica, Arial, sans-serif !important
+  border-radius: 10px !important
+  .dialog-content
+    padding: 0px !important
+    .dialog-content
+    .dialog-c-title
+      padding: 15px
+      background: var(--main-color)
+      color: #EEE
+      font-size: 18px
+      // font-family: roboto
+    .dialog-c-text
+      padding: 20px 15px
+  .vue-dialog-button
+    transition: .3s
+  .vue-dialog-button:hover
+    background: rgba(0, 0, 0, 0.08)
+    transition: .3s
+
+// Estilos globales para los modals
+.custom-modal
+  font-family: roboto, Helvetica Neue, Helvetica, Arial, sans-serif !important
+  .v--modal-box
+    background: transparent !important
+    box-shadow: none
+    margin: 30px 0px
+
+  .v--modal-background-click
+    padding: 10px
+    display: inline-flex
+  .modal-title
+    padding: 15px 25px
+    min-height: 30px
+    background: var(--main-color)
+    border-top-left-radius: 10px
+    border-top-right-radius: 10px
+    .modal-title-text
+      color: #EEE
+      font-size: 20px
+      font-weight: 500
+  .modal-body
+    padding: 30px 30px 15px 30px
+    font-style: 13px
+    background: #FFF
+    text-align: justify
+    .consideration-list
+      li
+        margin: 10px 0px
+  .modal-footer
+    padding: 10px 30px 20px 30px
+    background: #FFF
+    display: flex
+    justify-content: flex-end
+    border-bottom-left-radius: 10px
+    border-bottom-right-radius: 10px
+    &.space-between
+      justify-content: space-between
+      align-items: center
+  .flex-modal-form
+    display: flex
+    flex-wrap: wrap
+    .modal-form-flex-item
+      flex: 1
+      min-width: 190px
+      margin: 0px 10px
+
+@media (max-width: $breakpoint-phones)
+  .custom-modal
+    .modal-body
+      padding: 15px 15px 10px 15px
+
+.v--modal-overlay
+  background: rgba(0, 0, 0, 0.5) !important
+.v--modal-block-scroll
+  overflow: initial !important
+
+// Confirm modal box
+.el-message-box__wrapper
+  .el-message-box
+    width: 335px !important

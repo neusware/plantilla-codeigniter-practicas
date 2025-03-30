@@ -1,0 +1,88 @@
+# Módulos
+Los módulos son como la plantilla pero a tamaño reducido, teniendo la misma siempre estructura de carpetas que hay que seguir, junto a forma de nombrarlos específica.
+
+
+## Archivos Base en la carpeta modules
+* **modulesMain.js:** aquí se encuentran las librerías que haya que declarar globalmente y necesiten los módulos
+* **modulesModals.vue:** aquí se importan los modales de los módulo, siendo éste el archivo que ya está importado en los modales generales del proyecto.
+* **modulesRoutes.js:** aquí se importan las rutas de los módulos, y éste es el archivo que está importado al del router del proyecto.
+
+
+## Introducción (común para todos los módulos)
+Los módulos tienen siempre la misma extructura de carpetas:
+- **api**
+- **components**
+- **icons**
+- **modals**
+- **views**
+
+Además, tienen unos archivos base en la raíz del módulo que deben existir siempre para su correcto funcionamiento:
+
+* **routes.js:** aquí aparecen las rutas base que tiene el módulo, es un archivo fijo que no se debe tocar (excepto si se quiere actualizar el módulo original y crear una nueva versión del mismo).
+* **routesExtra.js:** aquí se encuentran las rutas extra que hagan falta cuando se quiere ampliar las funcionaldades de un módulo para un proyecto concreto.
+* **fake_package.json:** aquí se encuentran los paquetes necesarios del módulo, que tendrán que añadirse al package.json del proyecto.
+
+
+## Estructura (común para todos los módulos)
+> ### Carpeta "api"
+>> En ella encontramos los archivos *".js"* que sean necesarios para hacer peticiones al servidor. Con la misma estructura que en la carpeta *"api"* de la raíz de vue y extendiendo también de *"BaseApiCalls.js"*.
+>
+>
+> ### Carpeta "components"
+>> En esta carpeta se encuentran los componentes necesarios para nuestro módulo, diferenciados en dos tipos.
+>>
+>> - **Componentes comunes:** en la carpeta *"./common"*, los componentes que sean comunes dentro del módulo y no sean tabs.
+>>
+>> - **Tabs de las Vistas del módulo:** se crea **una carpeta por cada vista del módulo, con el mismo nombre que tiene dicha carpeta en views**. Dentro de ella, se creará un componente por cada tab con el título de la misma en **camelCase** (para poder identificarlas mejor).
+>
+>
+> ### Carpeta "icons"
+>>En ella se encuentran los iconos en formato SVG que necesitan los componentes y vistas del módulo.
+>>
+>> **Para que los detecte y funcionen, es necesario copiarlos y pegarlos en la carpeta de iconos de vue ("@/icons/svg").**
+>>
+>> **NOTA:** para identificarlos mejor, antes del nombre del icono que aparezca el nombre del módulo. Ejemplo: para un icono de DNI en el módulo de usuarios, el nombre debería ser *"UsersModule_dni.svg"*.
+>
+>
+> ### Carpeta "modals"
+>> En esta carpeta se encuentran los modales que necesita el módulo. Su funcionamiento es exactamente el mismo que en los modales del proyecto: se crea el modal con la extensión ".vue" y se importa al archivo index.vue.
+>>
+>> Además de esto **(y sólo cuando se instale el módulo por primera vez)**, habría que importar ese index.vue en archivo modulesModals.vue que aparece en la raíz de la carpeta *"modules"* del proyecto.
+>>
+>> **NOTA:** el archivo del modal se debe nombrar en singular y, en caso de contener varias palabras, se separará con un guión entre ellas. Ejemplos: *"usuario.vue"*, *"respuesta-pregunta.vue"*.
+>
+>
+> ### Carpeta "views"
+>> En esta carpeta se encuentran las vistas que tiene nuestro módulo. Cada vista tendrá, **obligatoriamente** una carpeta con el nombre de la misma y, dentro de ella:
+>> - **Un archivo *"index.vue"*** donde estará la vista en sí.
+>> - **Un archivo *"tabs.js"*** donde aparecen las tabs base del módulo en esa vista, aunque sólo exista una.
+>> - **Un archivo *"tabsExtra.js"*** en el que aparecerán las tabs extra creadas específicamente para ese proyecto.
+>>
+>> **NOTA:** la carpeta de la vista se debe nombrar en CamelCase (siendo la primera letra en mayúscula también). Ejemplos: *"Profile"*, *"UsersList"*.
+>
+
+
+## Instrucciones para instalación/actualización del módulo (común para todos los módulos)
+Hay que diferenciar entre una instalación del módulo por primera vez y una actualización del mismo en un proyecto en el que se esté usando.
+
+### Instalar el módulo por primera vez en un proyecto
+Para instalar el módulo, habrá que descargarlo desde su repositorio en gitlab, copiar la carpeta completa y pegarla en el apartado de módulos. Tras esto, hay que realizar algunos pasos más:
+
+* **modales:** para que se puedan usar los modales es necesario importar el index de los modales del módulo en el archivo *"modulesModals.vue"* que hay en la raíz de la carpeta *"modules"*.
+
+* **rutas:** para que las rutas del módulo aparezcan en el menú lateral o superior deben importarse en el archivo *"routes.js"* que hay en la raíz de la carpeta *"modules"*.
+
+* **icons:** para que el módulo detecte los iconos hace falta añadirlos a la carpeta *"icons/svg"*
+
+### Actualizar un módulo ya instalado
+Para actualizar un módulo ya instalado se haría lo mismo que al instalarlo, pero manteniendo los siguientes archivos intactos *"tabsExtra.js"* y *"routesExtra.js"*.
+
+
+## Instrucciones para la modificación del módulo (común para todos los módulos)
+Si queremos modificar un módulo ya existente hay que diferenciar si queremos hacer una mejora en el módulo base o añadir una funcionalidad concreta específica para unn proyecto concreto.
+
+### Mejorar el módulo base
+Para ello, hay que acceder al repositorio donde esté el módulo y realizar las modificaciones pertinentes, una vez funcione todo correctamente, hacer los commits y el push en el repositorio, guardar los cambios en el CHANGELOG y actualizar el README si fuera necesario.
+
+### Añadir funcionalidades al módulo para un proyecto concreto
+Si se quieren crear nuevas vistas se añaden al directorio views y las rutas de las mismas en *"routesExtra.js"*, con las tabs necesarias en su apartado de *"tabsExtra.js"*.

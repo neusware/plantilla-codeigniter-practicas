@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "chai": "~4.2.0",
+    "chai-http": "~4.3.0",
+    "faker": "^4.1.0",
+    "glob": "~7.1.4",
+    "grunt": "~0.13.3",
+    "grunt-mocha-test": "~0.13.3",
+    "load-grunt-tasks": "~5.1.0",
+    "mocha": "~1.20.0",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~2.1.0",
+    "grunt-contrib-watch": "~1.1.0"
+  }
+}

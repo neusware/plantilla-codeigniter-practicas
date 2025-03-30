@@ -1,0 +1,77 @@
+.topbar-container
+  background: var(--menu-bg) !important
+  position: fixed
+  width: 100%
+  z-index: 500
+
+.main-topbar
+  background: var(--menu-bg) !important
+  border: 0px !important
+  .topbar-items-box
+
+.topbar-menu-item
+  height: var(--topbar-height)
+
+.topbar-menu-item, .topbar-submenu-parent, .topbar-submenu-item
+  color: var(--font-menu-color) !important
+  padding: 0 20px
+  transition: .3s
+  font-size: 17px !important
+  display: flex
+  align-items: center
+  &.is-active
+    color: var(--font-menu-color) !important
+    background: var(--menu-item-selected) !important
+  &:hover
+    background: var(--menu-hover) !important
+    transition: .3s
+    .el-submenu__title
+      background-color: transparent !important
+  .el-submenu__title
+    font-size: var(--hight-font-size) !important
+.topbar-submenu-parent
+  padding: 0px !important
+  .el-submenu__title
+    height: var(--topbar-height)
+    display: flex
+    align-items: center
+    color: var(--font-menu-color) !important
+    .el-submenu__icon-arrow
+      display: block !important
+      position: relative
+      right: -10px
+      top: 3px
+
+    .el-icon-arrow-up:before
+      content: "\E78F" !important
+      color: var(--font-menu-color) !important
+    .el-icon-arrow-down:before
+      content: "\E790" !important
+      color: var(--font-menu-color) !important
+
+.el-menu--horizontal
+  .el-menu.el-menu--popup
+    margin: 0px
+    background-color: var(--sub-menu-bg)
+    .topbar-submenu-item
+      background-color: var(--sub-menu-bg)
+      height: calc(var(--topbar-height) - var(--topbar-height) / 3)
+      font-size: var(--hight-font-size) !important
+
+// Hay un bug que muestra en el sidebar el menú expandido cuando se selecciona una clase, con esto se soluciona
+body.has-topbar
+  .el-menu--vertical
+    display: none !important
+
+@media (max-width: $breakpoint-large)
+  .topbar-menu-item, .topbar-submenu-parent, .topbar-submenu-item
+    padding: 0 15px
+  .topbar-submenu-parent
+    padding: 0px
+  .main-logo
+    padding: 0px 5px 0px 20px !important
+@media (max-width: $breakpoint-desktop)
+  .topbar-menu-item, .topbar-submenu-parent, .topbar-submenu-item
+    padding: 0 10px
+  .main-logo
+    padding: 0px 5px 0px 10px !important

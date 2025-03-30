@@ -1,0 +1,59 @@
+# Carpeta "src/api".
+
+## Explicación Básica
+En ella encontramos los archivos .js que sean necesarios para hacer peticiones al servidor, además de "BaseApiCalls" y el archivo específico de la petición para el login.
+Los archivos para las peticiones extienden de *"BaseApiCalls.js"* para poder usar los métodos básicos que ya tenemos declarados automáticamente en todos los controladores, y son:
+- **getAll:** petición GET para recibir todos los registros.
+- **getPaginated:** petición GET para recibir todos los registros paginados.
+- **getDropdown:** petición GET para recibir todos los registros en formato dropdown (para el select).
+- **create:** petición POST para crear un registro.
+- **getById:** petición GET para recibir un registro por su ID.
+- **update:** petición POST para recibir actualizar un registro.
+- **delete:** petición POST para borrar un registro.
+Si se quisiera añadir una nueva petición se le añadiría debajo del constructor
+
+
+## Nomenclatura
+Para nombrar los archivos nuevos que creemos se hará en CamelCase y en singular (Ejemplo: ClientApi.js)
+
+
+## Ejemplo
+Esto es un ejemplo para un archivo de clientes (ClientApi.js).
+NOTA: Para un archivo básico, borrar los métodos "addNewClientConsignment" y "getClientsByUserId".
+Se importa "BaseApiCalls" y como parámetro del constructor se le pasa el nombre por el que se accederá a las rutas de la API, con eso ya funciona.
+
+```
+import BaseApiCalls, { initBaseApiCalls } from '@/api/BaseApiCalls'
+
+initBaseApiCalls()
+
+class ClientApi extends BaseApiCalls {
+  constructor() {
+    super('client')
+  }
+
+  // Ejemplo petición POST con varios parámetros
+  addNewClientConsignment(client_id, amount, is_paid, payment_date) {
+    return request({
+      url: `/api/${this.autoload_class_name}/addNewConsignment`,
+      method: 'post',
+      data: {
+        client_id: client_id,
+        amount: amount,
+        is_paid: is_paid,
+        payment_date: payment_date
+      }
+    })
+  }
+
+  // Ejemplo petición GET
+  getClientsByUserId(user_id) {
+    return request({
+      url: `api/${this.autoload_class_name}/getClientsByUserId/${user_id}`,
+      method: 'get'
+    })
+  }
+}
+
+export default new ClientApi()
+```

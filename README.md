@@ -1,2 +1,2 @@
-# plantilla-codeigniter-practicas
-Proyecto para trabajar en práctica - Signlab
+# Plantila
+Plantilla que usamos en la empresa
