@@ -1,11 +1,12 @@
-import request from '@/utils/request'
+import request from '@/utils/request' // solicitudes http
 import BaseApiCalls, { initBaseApiCalls } from '@/api/BaseApiCalls'
 
+// instancia objeto con el constructor
 initBaseApiCalls()
 
 class UserApi extends BaseApiCalls {
   constructor() {
-    super('user')
+    super('user') // valor asignado a autoload_class_name -> url parametrizada | parametro de constructor clase padre BaseApiCalls
   }
 
   getPaginateUsers(page) {

@@ -208,8 +208,17 @@ class MY_Controller extends REST_Controller {
       if ($success) {
         $this->response(array("message" => $this->lang->line('success_eliminar_'.$this->language_tag)),self::HTTP_OK,self::CODE_SHOW_SUCCESS_MESSAGE);
       } else {
+        // lang->line es una variable definida en general_lang.php a la que se le concatena el tag, aqui es null pero puede cogerlo del modelo con el que opera o del controller si está especificado
         $this->response(array("message" => $this->lang->line('error_eliminar_'.$this->language_tag)),self::HTTP_OK,self::CODE_BAD);
       }
+
+    //   if ($success) {
+    //     $message = $this->lang->line('success_eliminar_' . $this->language_tag) ?: 'El registro se eliminó correctamente.';
+    //     $this->response(array("message" => $message), self::HTTP_OK, self::CODE_SHOW_SUCCESS_MESSAGE);
+    // } else {
+    //     $message = $this->lang->line('error_eliminar_' . $this->language_tag) ?: 'Hubo un error al eliminar el registro.';
+    //     $this->response(array("message" => $message), self::HTTP_OK, self::CODE_BAD);
+    // }
     }
   }
 

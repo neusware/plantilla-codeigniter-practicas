@@ -73,14 +73,16 @@ $route['api/user/getAllUsers/page/(:num)'] = 'user/getAllUsers/$1'; // $1 = nume
 $route['api/user/getFilteredUsers'] = 'user/getFilteredUsers';
 $route['api/user/updateUserImage'] = 'user/updateUserImage';
 $route['api/user/deleteUserImage/(:num)'] = 'user/deleteUserImage/$1'; // $1 = user_id
+$route['api/user/phpVersion'] = 'user/phpVersion'; // $1 = user_id
 
 // External
 $route['api/external/forgotPassword'] = 'external/forgotPassword';
 $route['api/external/changePassword'] = 'external/changePassword';
 
 // TODO: insertar aquí las nuevas rutas
-
-$route['api/(:any)/all'] = '$1/all';
+// rutas genericas MY_controller
+// :any es el parametro en super == autoload. Hay que tener clara la nomenclatura de los nombres
+$route['api/(:any)/all'] = '$1/all'; // $1 -> placeholder dinámico (/:i)
 $route['api/(:any)/page/(:num)'] = '$1/page/$2';
 $route['api/(:any)/page/(:num)/(:any)'] = '$1/page/$2/$3';
 $route['api/(:any)/create'] = '$1/create';
@@ -93,5 +95,21 @@ $route['api/(:any)/data/(:num)'] = '$1/data/$2';
 $route['api/(:any)/uploadFile'] = '$1/uploadFile';
 $route['api/(:any)/file/(:any)/(:any)/(:any)'] = '$1/file/$2/$3/$4';
 
+// -------------------------rutas providers
+
+// $route['api/(:any)/page/(:num)'] = '$1/page/$2';
+$route['api/provider/getAllProviders/page/(:num)'] = 'provider/getAllProviders/$1';
+
+// $route['api/(:any)/data/(:num)'] = '$1/data/$2';
+$route['api/provider/getProvider/(:num)'] = 'provider/getProvider/$1';
+
+$route['api/provider/getFilteredProviders'] = 'provider/getFilteredProviders';
+
+// $route['api/(:any)/delete'] = '$1/delete';
+
+// TODO Update e Insert (no se pueden los d user pq usan auth), y demas métodos para archivos asociados (imagen)
+
+
+//! ojo con el orden
 // Everything that is not API is redirected to vue page
 $route['(.+)'] = 'vue/index';

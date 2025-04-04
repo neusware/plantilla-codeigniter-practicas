@@ -14,7 +14,7 @@ PUERTOS Y SERVICIOS
 VUE
 ===
 - La parte de vue está en application/vue
-- Es necesario hacer yarn install dentro de application/vue para instalar las bibliotecas.
+- Es necesario hacer npm / yarn install dentro de application/vue para instalar las bibliotecas.
 - yarn build despliega el index.php en application/views/vue/index.php y los assets en assets/dist
 - Se puede ejecutar "yarn run dev" para lanzar vue en modo desarrollo.
 

@@ -1,9 +1,6 @@
-<!-- : alias v-bind -->
 <template lang="pug">
-  //- <div class="user-list-component"><title-box icon="" title="">.......
   .users-list-component
     title-box(:icon="$helpers.getRouteIcon()" :title="$helpers.getRouteTitle()")
-//- <!-- <title-box icon="icono_usuario" title="Gestión de Usuarios"></title-box> -->
 
       add-new-thing(:disabled="deleting" v-if="$helpers.isAdmin()" text="Añadir Usuario" @click="$modal.show('usuario')")
 
@@ -15,6 +12,7 @@
       .pagination-box
         el-pagination(layout="prev, pager, next" :page-size="pagination.limit" :current-page="pagination.curr_page" :page-count="pagination.total_pages" @current-change="changePagination")
 
+    //- este comentario pug, antes de los elementos hijos
     el-table.user-table.custom-table(
       :data='userList'
       fit=""
@@ -54,7 +52,7 @@ export default {
   mounted() { //  componente inicializado y listo para comunicarse con otros comp o servs
     //  listener en bus
     this.$bus.$on('recargarListaUsuarios', () => {
-      //  ejecuto metodo del componente, que a su vez ejecuta metodo ApiUsers
+      //  ejecuto metodo del componente, que a su vez ejecuta metodo ApiUsers + param
       this.fetchData(this.pagination.curr_page)
     })
 
@@ -64,7 +62,7 @@ export default {
     this.fetchData(this.pagination.curr_page)
   },
 
-  data() { //  propiedades, encapsuladas
+  data() { //  propiedades, encapsuladas para el component
     return {
       loading: true,
       deleting: true,
@@ -81,6 +79,7 @@ export default {
   },
 
   methods: { //  metodos del component
+    // por defecto siempre se le pasa la primera página
     fetchData(page = 1) {
       //  seteo de variables
       this.loading = true
@@ -92,7 +91,7 @@ export default {
         limit: 10
       }
 
-      //  hace uso de metodo APi, para solicitud http con el query==filters y pagina y del parametro
+      //  hace uso de metodo APi, para solicitud http con el query==filters y pagina
       UserApi.getFilteredUsers(this.filters, page)
         .then((response) => {
           //  asigna los valores de la respuesta
@@ -100,8 +99,9 @@ export default {
           this.pagination = response.data.counts
           this.encodeFilters()
           this.loading = false
-        }).catch(() => { this.loading = false })
+        }).catch(() => { this.loading = false }) // evitar el 'cargando' siempre
     },
+    // modifica la ruta  basada en id usuario pero codificada, params(nombre_ruta,param) -> ir a profile
     handleClickUser(user) {
       this.encodeFilters('UsersProfile', { id_usuario: user.id })
       //   La linea de arriba es equivalente a esta:      this.$router.push({ name: 'UsersProfile', params: { id_usuario: user.id }})
@@ -115,7 +115,7 @@ export default {
     },
     //  recibe por parametro objeto usuario
     handleDelete(user) {
-      //  ejecuto modal, de tipo dialog?, y como segundo parametro objeto con las propiedades esperadas y datos extraidos del parametro
+      //  ejecuto modal, de tipo dialog, y como segundo parametro objeto con las propiedades esperadas y datos del parametro por interpolación, codificado aquí
       this.$modal.show('dialog', {
         title: 'Eliminar Usuario',
         text: `¿Seguro que quieres <b>eliminar</b> el usuario? <b>${user.first_name} ${user.last_name} (${user.username})</b>?`,
@@ -129,14 +129,18 @@ export default {
             title: 'Sí, borrar',
             default: true,
             handler: () => {
+              // flags
               this.loading = true
               this.deleting = true
+              // llamada api usuario a borrar x id
               UserApi.delete(user.id).then(response => {
+                // en respuesta refresco
                 this.fetchData(1)
               }).catch(() => {
                 this.loading = false
                 this.deleting = false
               })
+              // lo oculto, fuera de la promesa
               this.$modal.hide('dialog')
             }
           }
@@ -147,11 +151,12 @@ export default {
       this.fetchData(page)
     },
     addNewUser() {
-      //  abre un modal de tipo usuario?
+      //  abre un modal de tipo usuario?, puede que no se esté usando
       this.$modal.show('usuario')
     }
   },
   watch: {
+    // watcher - se observa la ruta para que en cada cambio...
     '$route'(prev_route, new_route) {
       if (prev_route.name !== new_route.name) this.fetchData()
     }

@@ -168,14 +168,19 @@ const baseAsyncRouterMap = [
     // hidden: true,
     children: [
       {
+        // el path se mantiene en /usuarios
         path: '',
+        // componentes de la /view
         component: _import('Users/index'),
         name: 'UsersList',
+        // datos extra /icons
         meta: { title: 'Usuarios', icon: 'peoples' }
       },
       {
+        // al path se le agrega un parametro local..../usuario/perfil?id
         path: 'perfil/:id_usuario',
         component: _import('Users/profile'),
+        // hidden - no se puede navegar directamente desde la topbar, debe accederse dada una acción
         hidden: true,
         name: 'UsersProfile',
         meta: { title: 'Perfíl' }

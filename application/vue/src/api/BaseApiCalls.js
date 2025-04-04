@@ -1,12 +1,17 @@
 import request from '@/utils/request'
 
+// delara variable
 var BaseApiCalls
 
+// declara funcion
 export function initBaseApiCalls() {
+  // condiciona
   if (BaseApiCalls) return
 
+  // devolver una clase que encapsula todos los métodos básicos de crud parametrizados
   BaseApiCalls = class BaseApiCalls {
     constructor(autoload_class_name) {
+      // parametro dinámico en función de la entidad a tratar
       this.autoload_class_name = autoload_class_name
     }
 

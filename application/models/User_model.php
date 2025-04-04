@@ -14,6 +14,7 @@ class User_model extends MY_Model {
     $this->singular_name = 'usuario';
     $this->plural_name = 'usuarios';
 
+    // hay muchos registros usuario en el modelo (user_group_model) en pk (user_id) [1:N]
     $this->has_many = array(
       'grupos' => array('model' => 'user_group_model' ,'primary_key' =>'user_id')
     );

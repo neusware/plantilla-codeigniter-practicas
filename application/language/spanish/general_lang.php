@@ -38,6 +38,10 @@ $lang['success_actualizar_imagen_user'] = "Se ha cambiado la imagen del usuario 
 $lang['error_actualizar_imagen_user'] = "Formato de imágenes permitidas: JPG, PNG, JPEG";
 $lang['error_eliminar_restrict_user'] = "¡El usuario está vinculado a '%s' y no se puede borrar!";
 
+// Provider
+$lang['error_eliminar_provider'] = "No se ha podido eliminar el proveedor.";
+$lang['success_eliminar_provider'] = "Proveedor eliminado correctamente.";
+
 // checkIn
 $lang['error_crear_checkIn'] = "No se ha podido crear la entrada/salida.";
 $lang['success_crear_checkIn'] = "Entrada/salida creada correctamente.";

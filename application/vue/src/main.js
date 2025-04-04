@@ -21,7 +21,7 @@ import router from './router'
 
 // importo métodos, se usarán con objeto $helpers
 import globalMethods from './helpers/globalMethods'
-//los hago globales
+// los hago globales
 Vue.use(globalMethods)
 
 import store from './store'

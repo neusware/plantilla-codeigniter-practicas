@@ -22,6 +22,7 @@ module.exports = {
       }
     }
   },
+  // encontrar errores ||--fix > npx eslint . --ext .js,.vue
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
@@ -72,6 +73,7 @@ module.exports = {
     'new-parens': 2,
     'no-array-constructor': 2,
     'no-caller': 2,
+    // permite el uso de instrucciones de consola
     'no-console': 'off',
     'no-class-assign': 2,
     'no-cond-assign': 2,
@@ -162,6 +164,7 @@ module.exports = {
       }
     }],
     'padded-blocks': [2, 'never'],
+    // exige comillas simples excepto escape
     'quotes': [2, 'single', {
       'avoidEscape': true,
       'allowTemplateLiterals': true
