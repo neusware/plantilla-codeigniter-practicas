@@ -11,14 +11,12 @@
   .filters-box
     custom-input.filter-item(
       v-model='filters.buscador',
-      placeholder='Buscar proveedor...',
-      style='margin: 10px',
+      placeholder='Buscar Proveedor...',
       @keyup.enter.native='fetchData(1)'
     )
     custom-button.add-item(
       :disabled='deleting',
-      @click.native='fetchData(1)',
-      style='min-width: 150px'
+      @click.native='fetchData(1)'
     ) Buscar
 
   .top-pagination(v-if='pagination.total_pages > 1')
@@ -39,8 +37,8 @@
     :element-loading-text='!deleting ? "Cargando..." : "Borrando..."'
   )
     el-table-column(label='Nombre', prop='nombre', min-width='190px')
-    el-table-column(label='CIF', prop='cif', min-width='190px')
-    el-table-column(label='Email', prop='email', min-width='190px')
+    el-table-column(label='CIF', prop='cif', min-width='190px', align='center')
+    el-table-column(label='Email', prop='email', min-width='190px', align='center')
     el-table-column(
       label='Teléfono',
       prop='phone',
@@ -49,7 +47,11 @@
     )
     el-table-column(label='Acciones', min-width='110px', align='center')
       template(slot-scope='scope')
-        el-tooltip(effect='light', content='Editar Proveedor', placement='top')
+        el-tooltip(
+          effect='light',
+          content='Editar Proveedor',
+          placement='top'
+          )
           svg-icon.control-icon.cus(
             icon-class='icono_editar',
             @click.prevent.native.stop='handleEdit(scope.row)'
@@ -147,12 +149,15 @@
           title: 'Eliminar Proveedor',
           text: `¿Seguro que quieres <b>eliminar</b> el proveedor <b>${provider.nombre}</b>?`,
           buttons: [
+            // dos objetos, dos btns
             {
               title: 'No'
             },
+            // btn2
             {
               title: 'Sí, borrar',
               default: true,
+              // función flecha en click con la logica para request a través de la API
               handler: () => {
                 this.loading = true
                 this.deleting = true
@@ -177,6 +182,7 @@
         this.fetchData(page)
       }
     },
+    // observa la ruta en cada cambio
     watch: {
       $route(prev_route, new_route) {
         if (prev_route.name !== new_route.name) this.fetchData()
@@ -189,6 +195,7 @@
 $breakpoint-phones: 480px
 $breakpoint-tablets: 768px
 
+// Ajustar los estilos para que coincidan con los de users-list-component
 .providers-list-component
   .filters-box
     display: flex
@@ -196,8 +203,10 @@ $breakpoint-tablets: 768px
     .filter-item
       min-width: 200px
       max-width: 200px
-      .add-item
-        margin: 10px
+      margin: 10px
+    .add-item
+      margin: 10px
+      width: 150px
 
   @media (max-width: $breakpoint-tablets)
     .providers-list-component

@@ -3,7 +3,7 @@
     .modal-title
         span.modal-title-text {{action}} Proveedor
     .modal-body
-      el-form.flex-modal-form(@submit.prevent.native="submitForm" :model="form" ref="providerForm" :rules="rules")
+      el-form.flex-modal-form(@submit.prevent.native="submitForm" :model="form" ref="providerForm" :rules="providerRules")
         .modal-form-flex-item(v-for="input in config.inputs" :key="input.prop")
           custom-input(v-if="input.type === 'text'" v-model="form[input.prop]" :label="input.label" :prop="input.prop")
           //- custom-input(v-else-if="input.type === 'file'" v-model="form[input.prop]" :label="input.label" :prop="input.prop")
@@ -23,8 +23,26 @@ export default {
       action: null,
       saving: false,
       form: {},
-      rules: {},
-      config: { inputs: [] } // Inicializamos config con un objeto vacío
+      // Reglas de validación para el formulario, usando el valor de prop en la confiiguración del modal
+      providerRules: {
+        nombre: [
+          { required: true, message: 'El nombre es obligatorio', trigger: 'blur' },
+          { min: 3, max: 50, message: 'El nombre debe tener entre 3 y 50 caracteres', trigger: 'blur' }
+        ],
+        cif: [
+          { required: true, message: 'El CIF es obligatorio', trigger: 'blur' },
+          { pattern: /^[A-Z0-9]{9}$/, message: 'El CIF debe tener 9 caracteres alfanuméricos', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: 'El email es obligatorio', trigger: 'blur' },
+          { type: 'email', message: 'El email no es válido', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: 'El teléfono es obligatorio', trigger: 'blur' },
+          { pattern: /^[0-9]{9}$/, message: 'El teléfono debe tener 9 dígitos', trigger: 'blur' }
+        ]
+      },
+      config: { inputs: [] } // config inicialmente con un objeto vacío
     }
   },
   methods: {

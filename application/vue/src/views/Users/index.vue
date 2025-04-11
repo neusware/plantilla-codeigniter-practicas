@@ -5,7 +5,7 @@
       add-new-thing(:disabled="deleting" v-if="$helpers.isAdmin()" text="Añadir Usuario" @click="$modal.show('usuario')")
 
     .filters-box
-      custom-input.filter-item(v-model="filters.buscador" placeholder="buscar usuario..." style="margin: 10px" @keyup.enter.native="fetchData(1)")
+      custom-input.filter-item(v-model="filters.buscador" placeholder="Buscar Usuario..." style="margin: 10px" @keyup.enter.native="fetchData(1)")
       custom-button.add-item(:disabled="deleting" @click.native="fetchData(1)" style="min-width: 150px;") Buscar
 
     .top-pagination(v-if="pagination.total_pages > 1")
