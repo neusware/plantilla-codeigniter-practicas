@@ -187,6 +187,19 @@ const baseAsyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/providers',
+    component: Layout, // ha de estar importado
+    children: [
+      {
+        path: '',
+        component: _import('Providers/index'), // ruta correcta
+        hidden: false,
+        name: 'ProvidersList',
+        meta: { title: 'Proveedores', icon: 'tree' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

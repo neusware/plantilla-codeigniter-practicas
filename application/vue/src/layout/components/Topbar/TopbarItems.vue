@@ -56,6 +56,7 @@
     mounted() {
       this.$bus.$on('userAvatarChanged', () => this.reloadAvatar())
     },
+    // !recibe las rutas como prop
     props: {
       routes: {
         type: Array

@@ -12,7 +12,7 @@ class Provider extends MY_Controller
     public function __construct()
     {
 
-        // parecen ser campos globales
+        // parecen ser campos globales, propiedades, atributos
 
         // ?que campos pongo en el dropdown
         $this->dropdownLabel = array("cif", "nombre");
@@ -41,7 +41,9 @@ class Provider extends MY_Controller
      public function getAllProviders_get($pagina)
      {
          // Filtros opcionales
-         $where = [];
+         $where = [
+            'is_hidden' => false
+          ];
 
          // Consulta filtrada (opt) + paginación
          $datos = $this->provider->paginate($pagina, $where, 10);
@@ -112,7 +114,7 @@ class Provider extends MY_Controller
         // igualmente pagino y agrego clausula a la query
         $datos = $query->paginate($page, $where, 10);
 
-        // en este punto $datos es un array asociativo con los datos de la consulta y la paginación
+        // en este punto $datos es un array asociativo con los datos de la consulta (filtrada) y la paginación
         /*
             $datos = [
                 "data" => [

@@ -41,6 +41,10 @@ $lang['error_eliminar_restrict_user'] = "¡El usuario está vinculado a '%s' y n
 // Provider
 $lang['error_eliminar_provider'] = "No se ha podido eliminar el proveedor.";
 $lang['success_eliminar_provider'] = "Proveedor eliminado correctamente.";
+$lang['error_crear_provider'] = "No se ha podido crear el proveedor.";
+$lang['success_crear_provider'] = "Proveedor creado correctamente.";
+$lang['error_actualizar_provider'] = "No se ha podido actualizar el proveedor.";
+$lang['success_actualizar_provider'] = "Proveedor actualizado correctamente.";
 
 // checkIn
 $lang['error_crear_checkIn'] = "No se ha podido crear la entrada/salida.";

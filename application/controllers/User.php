@@ -43,7 +43,7 @@ class User extends MY_Controller
   // se corresponde con el metodo de mismo nombre userAPI.js -
   public function getFilteredUsers_post()
   {
-    // obtiene el filtro, par key-value [buscador]
+    // obtiene el filtro, par key 'filter' en [buscador]
     $buscador = $this->post('filter')['buscador'];
     // consulta obtiene la paginación
     $page = $this->post('page');

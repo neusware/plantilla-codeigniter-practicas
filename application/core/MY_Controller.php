@@ -41,6 +41,7 @@ class MY_Controller extends REST_Controller {
 	// Field that has the name of the file which is going to be downloaded
   protected $file_name_field = null;
 
+  // Trazabilidad de los registros creados. Qué usuario solicita crear el registro (store en este caso)
   protected $store_user_id = FALSE;
 
   // Add every method that not needs to be checked or if are manually checked.
@@ -141,32 +142,55 @@ class MY_Controller extends REST_Controller {
     }
   }
 
+  // Devuelve todos los registros
   public function all_get() {
     $elements = $this->{$this->model}->with_everything()->get_all();
 
     $this->response($elements,self::HTTP_OK,self::CODE_OK);
   }
 
+  // buscador nunca lo usa, ni incorpora la lógica, solo devuelve registros paginados
   public function page_get($pagina = 1,$buscador = null) {
     $elements = $this->{$this->model}->with_everything()->paginate($pagina, array(), 10);
 
     $this->response($elements,self::HTTP_OK,self::CODE_OK);
   }
 
+  /** Create_post()
+   *
+   * 1. Comprueba modelo
+   * 2. Extrae datos del request (solo par 'data' o payload entero)
+   * 3. Transforma el tipo de dato que llega a array asociativo
+   * 4. Si existe par clave 'id' lo elimina, el id se gestiona en db (autoincremental)
+   * 5. Trazabilidad: A partir la flag 'store_user_id' se relaciona el registro creado con el usuario que lo crea, a través del id que se extrae del token
+   * 6. Insert(): Convierte el array asociativo en array, y hace un count para verificar que haya elementos antes de hacer el insert. La operación devuelve un boolean.
+   * 7. Response: Comprueba el resultado de la operación con la db y determina una response u otra.
+   *
+   */
   public function create_post() {
+    // lo va coger desde el controlador? ha de ser propiedad definida
     if($this->model != null) {
+      // accede al request en "data" para extraer el valor de la clave o todo el payload del request
       $element = $this->post("data") != null ? $this->post("data") : $this->post();
 
+      // transpila datos a array asocitivo
       if(is_string($element)) $element = json_decode($element);
       else $element = json_decode(json_encode($element));
 
+      //try acceder clave id para eliminar el par, ya que seguramente sea autoincremental en la db
       if(isset($element->id)) unset($element->id);
+      // trazabilidad, asociar el registro creado con el usuario que lo crea. store_user_id se usa como flag boolean,
       if($this->store_user_id)
+      //! extrae el id de usuario que realiza la petición del token, y lo asigna a una clave de la estructura de datos
         $element->usuario_id = $this->token->get_user_id($this->api_token);
 
+      // Para verificar si el array contiene datos [element->toArray->count()] | Inserta los datos a partir de ese array, a través del modelo y del método insert
       $element_id = count((array)$element) ? $this->{$this->model}->insert($element) : false;
+
+      // Si existen archivos asociados los inserta
       $this->{$this->model}->uploadFilesIfExists($element_id);
 
+      // La operación devolverá un boolean que determinará la response.
       if ($element_id) {
         $this->response(array("message" => $this->lang->line('success_crear_'.$this->language_tag), "id" => $element_id),self::HTTP_OK,self::CODE_SHOW_SUCCESS_MESSAGE);
       } else {
@@ -175,23 +199,43 @@ class MY_Controller extends REST_Controller {
     }
   }
 
+  /** update_post()
+   *
+   * 1. Comprueba el modelo
+   * 2. Trata de extraer el par en clave 'data' o el payload completo
+   * 3. Transpila estructura de datos a array asociativo
+   * 4. Almacena el id para seleccionar registro a actualizar
+   * 5. Elimina el par en clave 'id' del array asoc
+   * 6. Evalúa llevar a cabo la lógica para trazabilidad
+   * 7. Actualiza -> convierte el array asociativo a array puro y lo contea, si hay elementos, hace uso del método update(id, datos) pasándole el id para seleccionar el registro y los datos con los que editarlo.
+   * 8. Evalúa el resultado de la operación, para elaborar y enviar la response
+  */
   public function update_post() {
+    // Comprueba el modelo
     if($this->model != null) {
+      // Extrae el par en clave data o el payload completo
       $element = $this->post("data") != null ? $this->post("data") : $this->post();
 
+      // Transpila a array asociativo
       if(is_string($element)) $element = json_decode($element);
       else $element = json_decode(json_encode($element));
 
+      // Almacena el valor en clave id, para seleccionar el registro en el update()
       $element_id = $element->id;
 
+      // Si existe el par, lo elimina del array asociativo
       if(isset($element->id)) unset($element->id);
+      // Lógica para la trazabilidad
       if($this->store_user_id){
         $element->usuario_id = $this->token->get_user_id($this->api_token);
       }
 
+      // Update -> convierte asociativo a arraypuro, lo contea, de haber elementos actualiza
       $success = count((array)$element) ? $this->{$this->model}->update($element_id,$element) : true;
+      // Lógica para archivos asociados
       $this->{$this->model}->uploadFilesIfExists($element_id);
 
+      // Evalúa la respuesta booleana de la operación determinando que response enviar
       if ($success) {
         $this->response(array("message" => $this->lang->line('success_actualizar_'.$this->language_tag), "id" => $element_id),self::HTTP_OK,self::CODE_SHOW_SUCCESS_MESSAGE);
       } else {
