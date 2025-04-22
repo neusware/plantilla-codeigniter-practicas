@@ -26,6 +26,26 @@ class ProviderApi extends BaseApiCalls {
     })
   }
 
+  // checkCIF(cif) {
+  //   return request({
+  //     url: `/api/provider/checkCIF`,
+  //     method: 'post',
+  //     data: { cif }
+  //   })
+  // }
+
+  // createProvider(data) {
+  //   data = JSON.stringify(data)
+  //   console.log('Método createProvider (ProviderApi) ejecutándose')
+  //   return request({
+  //     url: `/api/${this.autoload_class_name}/createProvider`,
+  //     method: 'post',
+  //     data: {
+  //       data
+  //     }
+  //   })
+  // }
+
 //   updateUserImage(formData) {
 //     return request.post(`api/user/updateUserImage`, formData, { headers: { 'Content-Type': 'multipart/form-data' }})
 //   }

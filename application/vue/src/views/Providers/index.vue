@@ -14,10 +14,7 @@
       placeholder='Buscar Proveedor...',
       @keyup.enter.native='fetchData(1)'
     )
-    custom-button.add-item(
-      :disabled='deleting',
-      @click.native='fetchData(1)'
-    ) Buscar
+    custom-button.add-item(:disabled='deleting', @click.native='fetchData(1)') Buscar
 
   .top-pagination(v-if='pagination.total_pages > 1')
     .pagination-box
@@ -38,7 +35,12 @@
   )
     el-table-column(label='Nombre', prop='nombre', min-width='190px')
     el-table-column(label='CIF', prop='cif', min-width='190px', align='center')
-    el-table-column(label='Email', prop='email', min-width='190px', align='center')
+    el-table-column(
+      label='Email',
+      prop='email',
+      min-width='190px',
+      align='center'
+    )
     el-table-column(
       label='Teléfono',
       prop='phone',
@@ -47,11 +49,7 @@
     )
     el-table-column(label='Acciones', min-width='110px', align='center')
       template(slot-scope='scope')
-        el-tooltip(
-          effect='light',
-          content='Editar Proveedor',
-          placement='top'
-          )
+        el-tooltip(effect='light', content='Editar Proveedor', placement='top')
           svg-icon.control-icon.cus(
             icon-class='icono_editar',
             @click.prevent.native.stop='handleEdit(scope.row)'
@@ -86,31 +84,40 @@
     name: 'provider',
     mixins: [RouteFilters],
     mounted() {
+      // Emito el evento por el bus global
       this.$bus.$on('recargarListaProveedores', () => {
+        // Lectura de datos pasandole la pagincacion actual
         this.fetchData(this.pagination.curr_page)
       })
 
+      // fb
       console.log('mounted() en componente provider ejecutado')
+      // Lectura de datos pasandole la pagincacion actual
       this.fetchData(this.pagination.curr_page)
     },
 
     data() {
       return {
+        // propiedades de la instancaia vue
+        // flags
         loading: true,
         deleting: true,
+        // propiedad que almacena los datos
         providerList: [],
         pagination: {
           curr_page: 1,
           total_pages: 1,
-          limit: 10
+          limit: 10,
         },
+        // propiedad para el input, con valor por defecto
         filters: {
-          buscador: ''
-        }
+          buscador: '',
+        },
       }
     },
 
     methods: {
+      // lectura de datos a través del getFilteredProviders (filtro + pagincacion)
       fetchData(page = 1) {
         this.loading = true
         this.deleting = false
@@ -118,13 +125,15 @@
         this.pagination = {
           curr_page: 1,
           total_pages: 1,
-          limit: 10
+          limit: 10,
         }
 
+        // llamada a la front API
         ProviderApi.getFilteredProviders(this.filters, page)
           .then((response) => {
             this.providerList = response.data.data
             this.pagination = response.data.counts
+            // codifica la ruta en la barra de navegacion
             this.encodeFilters()
             this.loading = false
           })
@@ -132,62 +141,75 @@
             this.loading = false
           })
       },
+      // update de datos a partir del tooltip, recibe por parámtro el provider (scope.row)
       handleEdit(provider) {
+        // elabora un objeto con el proovedor pasado por parámetro y lo almacena
         const provider_data = { provider: provider }
+        // fb
         console.log(
           'Método handleDelete() - Abriendo modal provider pasándole los datos: ',
           provider
         )
+        // ejecuta el modal provider pasándole los datos (objeto provider), el modal incorppora la logica de negocio
         this.$modal.show('provider', JSON.parse(JSON.stringify(provider_data)))
       },
+      // delete de datos a partir del tooltip, recibe por parámtro el provider (scope.row), sin embargo, se codifica a piñon el modal y la lógica
       handleDelete(provider) {
+        // fb
         console.log(
           'Método handleDelete() - Abriendo modal provider pasándole los datos: ',
           provider
         )
+        // ejecuto el modal y lo configuro
         this.$modal.show('dialog', {
           title: 'Eliminar Proveedor',
           text: `¿Seguro que quieres <b>eliminar</b> el proveedor <b>${provider.nombre}</b>?`,
           buttons: [
             // dos objetos, dos btns
             {
-              title: 'No'
+              title: 'No',
             },
             // btn2
             {
               title: 'Sí, borrar',
               default: true,
-              // función flecha en click con la logica para request a través de la API
+              // función flecha en click btn con la logica para request a través de la API
               handler: () => {
+                // seteo de flags
                 this.loading = true
                 this.deleting = true
+                // fb
                 console.log(
                   'Enviando la solicitud  delete() al back a traves de la ProviderApi '
                 )
+                // llamada a la front API, elimino
                 ProviderApi.delete(provider.id)
                   .then((response) => {
+                    // lectura x defecto para refrescar
                     this.fetchData(1)
                   })
                   .catch(() => {
+                    // en excepción, seteo de flags
                     this.loading = false
                     this.deleting = false
                   })
+                // escondo el modal
                 this.$modal.hide('dialog')
-              }
-            }
-          ]
+              },
+            },
+          ],
         })
       },
       changePagination(page) {
         this.fetchData(page)
-      }
+      },
     },
     // observa la ruta en cada cambio
     watch: {
       $route(prev_route, new_route) {
         if (prev_route.name !== new_route.name) this.fetchData()
-      }
-    }
+      },
+    },
   }
 </script>
 

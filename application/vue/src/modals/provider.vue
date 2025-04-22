@@ -47,13 +47,19 @@ export default {
   },
   methods: {
     beforeOpen(event) {
+      // fb
       console.log('Método beforeOpen() ejecutándose en modal provider')
+      // manejo de excepciones
       try {
+        // importo configuraciones
         this.config = require('@/modals/config/provider').default
+        // fb
         console.log('Configuración por defecto para el modal cargada')
       } catch (error) {
+        // fb
         console.error('Error al cargar la configuración por defecto para el modal: ', error)
-        this.config = { inputs: [] } // Fallback en caso de error
+        // seteo a vacio en caso de excepcion
+        this.config = { inputs: [] }
       }
       // ?
       this.resetForm()
@@ -62,13 +68,14 @@ export default {
       if (event.params && event.params.provider) {
         // entonces la accón es editar
         this.action = 'Editar'
-        // extraigo los datos del objeto  para copiarlos al form
+        // extraigo al form los datos del objeto
         this.form = { ...event.params.provider }
         // fb
         console.log('Existe un objeto provider en el event.params > action = editar && this.form = event.params.provider')
       } else {
-        // si el event.params no trae provider va ser añadir, el form contiene los datos por defecto en configuración
+        // si el event.params no trae provider va ser añadir, el form contiene los datos por defecto en configuración []
         console.log('No existe un objeto provider en el event.params > action = añadir')
+        // seteo la accion
         this.action = 'Añadir'
       }
     },
@@ -102,9 +109,10 @@ export default {
               console.log('Operación completada con éxito, emitiendo recargarListaProveedores por el bus')
               this.$bus.$emit('recargarListaProveedores')
             }).catch(() => {
-              console.console('Catch en Onsubmit() - create')
+              console.log('Catch en Onsubmit() - create')
+              // evita el cargando freeze
               this.saving = false
-            }) // evita el cargando freeze
+            })
           } else {
             // se repite la logica, esta vez updateando
             console.log('Enviando solicitud update(this.form) al back a través de la ProviderApi:', this.form)
@@ -114,7 +122,7 @@ export default {
               console.log('Operación completada con éxito, emitiendo recargarListaProveedores por el bus')
               this.$bus.$emit('recargarListaProveedores')
             }).catch(() => {
-              console.console('Catch en Onsubmit() - update')
+              console.log('Catch en Onsubmit() - update')
               this.saving = false
             })
           }

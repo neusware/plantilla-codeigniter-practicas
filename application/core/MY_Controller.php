@@ -180,11 +180,15 @@ class MY_Controller extends REST_Controller {
       //try acceder clave id para eliminar el par, ya que seguramente sea autoincremental en la db
       if(isset($element->id)) unset($element->id);
       // trazabilidad, asociar el registro creado con el usuario que lo crea. store_user_id se usa como flag boolean,
+
+
+      // trazabilidad
       if($this->store_user_id)
-      //! extrae el id de usuario que realiza la petición del token, y lo asigna a una clave de la estructura de datos
+      // extrae el id de usuario que realiza la petición del token, y lo asigna a una clave de la estructura de datos
         $element->usuario_id = $this->token->get_user_id($this->api_token);
 
-      // Para verificar si el array contiene datos [element->toArray->count()] | Inserta los datos a partir de ese array, a través del modelo y del método insert
+      //! Operación insert
+      // Casting explicito a array y count para verificar si el array contiene datos [element->toArray->count()] | De haber elementos, inserta los datos a partir de ese array, a través del modelo y del método insert
       $element_id = count((array)$element) ? $this->{$this->model}->insert($element) : false;
 
       // Si existen archivos asociados los inserta
@@ -203,10 +207,10 @@ class MY_Controller extends REST_Controller {
    *
    * 1. Comprueba el modelo
    * 2. Trata de extraer el par en clave 'data' o el payload completo
-   * 3. Transpila estructura de datos a array asociativo
+   * 3. Transpila estructura de datos que recibe a array asociativo
    * 4. Almacena el id para seleccionar registro a actualizar
-   * 5. Elimina el par en clave 'id' del array asoc
-   * 6. Evalúa llevar a cabo la lógica para trazabilidad
+   * 5. Elimina el par en clave 'id' del array asoc, pq despues lo va usar para actualizar el registro
+   * 6. Evalúa llevar a cabo la lógica para trazabilidad (boolen flag)
    * 7. Actualiza -> convierte el array asociativo a array puro y lo contea, si hay elementos, hace uso del método update(id, datos) pasándole el id para seleccionar el registro y los datos con los que editarlo.
    * 8. Evalúa el resultado de la operación, para elaborar y enviar la response
   */
@@ -230,8 +234,9 @@ class MY_Controller extends REST_Controller {
         $element->usuario_id = $this->token->get_user_id($this->api_token);
       }
 
-      // Update -> convierte asociativo a arraypuro, lo contea, de haber elementos actualiza
+      //! Update -> casting explícito convierte asociativo a arraypuro, lo contea, de haber elementos actualiza
       $success = count((array)$element) ? $this->{$this->model}->update($element_id,$element) : true;
+
       // Lógica para archivos asociados
       $this->{$this->model}->uploadFilesIfExists($element_id);
 
@@ -244,11 +249,24 @@ class MY_Controller extends REST_Controller {
     }
   }
 
+  /** delete_post()
+   *
+   * 1. Verifica el modelo
+   * 2. Extrae el id del request en clave 'id' para eliminar el registro
+   * 3. Elabora la consulta a partir del modelos, llama al método delete() pasándole el id para eliminar el registro.
+   * 4. Evalúa la respuesta booleana de la operación determinando que response enviar, con mensajes  personalizados a partir de los langs.
+   */
   public function delete_post() {
     if($this->model != null) {
+
+      // extraigo valor en clave 'id' del request
       $id = $this->post("id");
+
+      // !Operación delete
+      // hago uso del modelo y método, para eliminar el registro por id
       $success = $this->{$this->model}->delete($id);
 
+      // elaboro la response en función del valor boolean resultado de la operación
       if ($success) {
         $this->response(array("message" => $this->lang->line('success_eliminar_'.$this->language_tag)),self::HTTP_OK,self::CODE_SHOW_SUCCESS_MESSAGE);
       } else {

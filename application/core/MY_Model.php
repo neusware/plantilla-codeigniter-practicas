@@ -216,6 +216,8 @@ class MY_Model extends Base_Model
 	// devuelve un array de strings con la cantidad de cada model que se inserte en "$restrictArray", y si no hay ninguna coincidencia devuelve "false"
 	// Ej de lo que devuelve:  array('un usuario', '2 grupos')
 	// para poner el nombre (si contiene datos) hay que poner en los model (para cada uno el suyo) :   $this->singular_name = 'usuario';   $this->plural_name = 'usuarios';
+
+	// viene a checkear si un registro esta relacionado con algunos de los modelos que se le pasan por parámetro, devuelve un mensaje tipo ["un usuario", "2 grupos"] o false, usando variables en función del sizeof para construir el mensaje de response. Esas variables se suelen definir en el modelo
 	public function checkRestrict($id, $restrictArray)
 	{
 		$result = array();

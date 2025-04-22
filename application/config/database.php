@@ -71,6 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | the query builder class.
 */
 $active_group = 'default';
+// !apuntar ip máquina
 $ip_host = '192.168.56.1';
 $query_builder = TRUE;
 
