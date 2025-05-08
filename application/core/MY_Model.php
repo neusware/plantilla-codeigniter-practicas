@@ -160,7 +160,7 @@ class MY_Model extends Base_Model
 	}
 
 	//adapted dropdown for vue element
-	public function dropdownVue($dropdown_keys, $dropdown_value, $separator = " ", $get_many_by = array())
+	public function dropdownVue($dropdown_keys, $dropdown_value, $separator = " - ", $get_many_by = array())
 	{
 		$dropdown_keys = is_array($dropdown_keys) ? $dropdown_keys : array($dropdown_keys);
 
@@ -169,7 +169,7 @@ class MY_Model extends Base_Model
 		foreach ($elements as $element) {
 			$element->label = $element->{$dropdown_keys[0]};
 			for ($i = 1; $i < sizeof($dropdown_keys); $i++) {
-				$element->label = $element->label . $separator . $element->{$dropdown_keys[$i]};
+				$element->label =  $element->{$dropdown_keys[$i]} . $separator .$element->label;
 			}
 			$element->value = $element->{$dropdown_value};
 			$dropdown[] = $element;

@@ -1,17 +1,17 @@
 <template lang="pug">
-.providers-list-component
+.products-list-component
   title-box(:icon='$helpers.getRouteIcon()', :title='$helpers.getRouteTitle()')
     add-new-thing(
       :disabled='deleting',
       v-if='$helpers.isAdmin()',
-      text='Añadir Proveedor',
-      @click='$modal.show("provider")'
+      text='Añadir Producto',
+      @click='$modal.show("product")'
     )
 
   .filters-box
     custom-input.filter-item(
       v-model='filters.buscador',
-      placeholder='Buscar Proveedor...',
+      placeholder='Buscar Producto...',
       @keyup.enter.native='fetchData(1)'
     )
     custom-button.add-item(:disabled='deleting', @click.native='fetchData(1)') Buscar
@@ -26,21 +26,27 @@
   //-       @current-change='changePagination'
   //-     )
 
-  el-table.provider-table.custom-table(
-    :data='providerList',
+  el-table.product-table.custom-table(
+    :data='productList',
     fit='',
     stripe,
     v-loading='loading',
     :element-loading-text='!deleting ? "Cargando..." : "Borrando..."'
   )
-    el-table-column(label='Nombre', prop='nombre', min-width='190px')
-    el-table-column(label='CIF', prop='cif', min-width='190px', align='center')
-    el-table-column(label='Email', prop='email', min-width='190px', align='center')
-    el-table-column(label='Teléfono', prop='phone', min-width='120px', align='center')
+    //- el-table-column(label='Id', prop='id', min-width='190px')
+    el-table-column(label='Nombre', prop='nombre', min-width='190px', align='center')
+    el-table-column(label='Código', prop='codigo', min-width='120px', align='center')
+    el-table-column(label='Proovedor', prop='provider', min-width='190px', align='center')
+      template(slot-scope='scope')
+        span {{  scope.row.provider.nombre }}
+    el-table-column(label='Stock', prop='stock', min-width='120px', align='center')
+    el-table-column(label='Precio', prop='precio', min-width='120px', align='center')
+     template(slot-scope='scope')
+          span {{ $helpers.formatNumber(scope.row.precio, "€") }}
     el-table-column(label='Acciones', min-width='110px', align='center')
       template(slot-scope='scope')
         el-tooltip(effect='light',
-          content='Editar Proveedor',
+          content='Editar Producto',
           placement='top')
           svg-icon.control-icon.cus(
             icon-class='icono_editar',
@@ -48,7 +54,7 @@
           )
         el-tooltip(v-if='$helpers.isAdmin()',
           effect='light',
-          content='Eliminar Proveedor',
+          content='Eliminar Producto',
           placement='top-end')
           svg-icon.control-icon.cus(
             icon-class='icono_eliminar',
@@ -67,29 +73,29 @@
 </template>
 
 <script>
-import ProviderApi from '@/api/ProviderApi'
+import ProductApi from '@/api/ProductApi'
 import RouteFilters from '@/mixins/RouteFilters'
 
 export default {
-  name: 'provider',
+  name: 'product',
   mixins: [RouteFilters],
   mounted() {
     // Listener del evento por el bus global
-    this.$bus.$on('recargarListaProveedores', () => {
+    this.$bus.$on('recargarListaProductos', () => {
       // Lectura de datos pasandole la pagincacion actual
       this.fetchData(this.pagination.curr_page)
     })
 
     // fb
-    console.log('mounted() en componente provider ejecutado')
+    console.log('mounted() en componente producto ejecutado')
     // Lectura de datos pasandole la pagincacion actual al montar instancia
     this.fetchData(this.pagination.curr_page)
   },
   // Dejo de escuchar el evento al destruir el componente
   beforeDestroy() {
     // Elimina elimino el listener para evitar multiples solicitudes
-    this.$bus.$off('recargarListaProveedores')
-    console.log('Eliminado listener recargarListaProveedores')
+    this.$bus.$off('recargarListaProductos')
+    console.log('Eliminado listener recargarListaProductos')
   },
 
   data() {
@@ -99,7 +105,7 @@ export default {
       loading: true,
       deleting: true,
       // propiedad que almacena los datos
-      providerList: [],
+      productList: [],
       pagination: {
         curr_page: 1,
         total_pages: 1,
@@ -113,21 +119,21 @@ export default {
   },
 
   methods: {
-    // lectura de datos a través del getFilteredProviders (filtro + pagincacion)
+    // lectura de datos a través del getFilteredProducts (filtro + pagincacion)
     fetchData(page = 1) {
       this.loading = true
       this.deleting = false
-      this.providerList = []
+      this.productList = []
       this.pagination = {
         curr_page: 1,
         total_pages: 1,
         limit: 10
       }
 
-      // llamada a la front API
-      ProviderApi.getFilteredProviders(this.filters, page)
+      // llamada front API
+      ProductApi.getFilteredProducts(this.filters, page)
         .then(response => {
-          this.providerList = response.data.data
+          this.productList = response.data.data
           this.pagination = response.data.counts
           // codifica la ruta en la barra de navegacion
           this.encodeFilters()
@@ -138,30 +144,30 @@ export default {
           this.loading = false
         })
     },
-    // update de datos a partir del tooltip, recibe por parámtro el provider (scope.row)
-    handleEdit(provider) {
+    // update de datos a partir del tooltip, recibe por parámtro el product (scope.row)
+    handleEdit(product) {
       // elaboro un objeto con el proovedor pasado por parámetro y lo almaceno
-      const provider_data = { provider: provider }
+      const product_data = { product: product }
       // fb
       console.log(
-        'Método handleEdit() - Abriendo modal provider pasándole los datos: ',
-        provider
+        'Método handleEdit() - Abriendo modal product pasándole los datos: ',
+        product
       )
-      // ejecuta el modal provider pasándole los datos (objeto provider), que  los recogera en event,params.(provider), es como se comunican
-      this.$modal.show('provider', JSON.parse(JSON.stringify(provider_data)))
+      // ejecuta el modal product pasándole los datos (objeto product), que  los recogera en event,params.(product), es como se comunican
+      this.$modal.show('product', JSON.parse(JSON.stringify(product_data)))
     },
 
-    // delete de datos a partir del tooltip, recibe por parámtro el provider (scope.row), sin embargo, se codifica a piñon el modal y la lógica
-    handleDelete(provider) {
+    // delete de datos a partir del tooltip, recibe por parámtro el product (scope.row), sin embargo, se codifica a piñon el modal y la lógica
+    handleDelete(product) {
       // fb
       console.log(
         'Método handleDelete() - Abriendo modal dialog usando los datos: ',
-        provider
+        product
       )
-      // ejecuto el modal dialog, no provider y lo configuro
+      // ejecuto el modal dialog, no product y lo configuro
       this.$modal.show('dialog', {
-        title: 'Eliminar Proveedor',
-        text: `¿Seguro que quieres <b>eliminar</b> el proveedor <b>${provider.nombre}</b>?`,
+        title: 'Eliminar Producto',
+        text: `¿Seguro que quieres <b>eliminar</b> el producto <b>${product.nombre}</b>?`,
         buttons: [
           // dos objetos, dos btns
           {
@@ -178,10 +184,10 @@ export default {
               this.deleting = true
               // fb
               console.log(
-                'Enviando la solicitud  delete() al back a traves de la ProviderApi '
+                'Enviando la solicitud  delete() al back a traves de la ProductApi '
               )
               // llamada a la front API, elimino
-              ProviderApi.delete(provider.id)
+              ProductApi.delete(product.id)
                 .then(response => {
                   // lectura x defecto para refrescar
                   this.fetchData(1)
@@ -217,7 +223,7 @@ $breakpoint-phones: 480px
 $breakpoint-tablets: 768px
 
 // Ajustar los estilos para que coincidan con los de users-list-component
-.providers-list-component
+.products-list-component
   .filters-box
     display: flex
     flex-wrap: wrap
@@ -230,15 +236,16 @@ $breakpoint-tablets: 768px
       width: 150px
 
   @media (max-width: $breakpoint-tablets)
-    .providers-list-component
+    .products-list-component
       .filters-box
         .filter-item
           min-width: 46%
   @media (max-width: $breakpoint-phones)
-    .providers-list-component
+    .products-list-component
       .filters-box
         .filter-item
           flex: 1
           min-width: 95%
           margin: 10px
 </style>
+

@@ -4,6 +4,7 @@
     modal-recuperar-pass
     modal-usuario
     modal-provider
+    modal-product
 </template>
 
 <script>
@@ -11,6 +12,7 @@
   import ModalRecuperarPass from './recuperar-pass.vue'
   import ModalUsuario from './usuario.vue'
   import ModalProvider from './provider.vue'
+  import ModalProduct from './product.vue'
 
   export default {
     name: 'GlobalModals',
@@ -18,7 +20,8 @@
       ModalHelloWorld,
       ModalRecuperarPass,
       ModalUsuario,
-      ModalProvider
+      ModalProvider,
+      ModalProduct
     }
   }
 </script>

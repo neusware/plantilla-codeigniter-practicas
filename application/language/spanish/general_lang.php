@@ -46,6 +46,17 @@ $lang['success_crear_provider'] = "Proveedor creado correctamente.";
 $lang['error_actualizar_provider'] = "No se ha podido actualizar el proveedor.";
 $lang['success_actualizar_provider'] = "Proveedor actualizado correctamente.";
 
+
+// Product
+$lang['error_eliminar_product'] = "No se ha podido eliminar el producto.";
+$lang['success_eliminar_product'] = "Producto eliminado correctamente.";
+$lang['error_crear_product'] = "No se ha podido crear el producto.";
+$lang['success_crear_product'] = "Producto creado correctamente.";
+$lang['error_actualizar_product'] = "No se ha podido actualizar el producto.";
+$lang['success_actualizar_product'] = "Producto actualizado correctamente.";
+
+//---------------------------------------------------------------
+
 // checkIn
 $lang['error_crear_checkIn'] = "No se ha podido crear la entrada/salida.";
 $lang['success_crear_checkIn'] = "Entrada/salida creada correctamente.";

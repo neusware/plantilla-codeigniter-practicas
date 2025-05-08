@@ -140,5 +140,6 @@ $autoload['model'] = array(
   "user_group_model" => "user_group",
   "group_model" => "group",
   "ion_auth_model" => "ion_auth_model",
-  "provider_model" => 'provider'
+  "provider_model" => 'provider',
+  "product_model" => "product"
 );

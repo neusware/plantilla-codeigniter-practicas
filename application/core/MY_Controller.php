@@ -72,10 +72,16 @@ class MY_Controller extends REST_Controller {
 		parent::response(array("code" => $code, "data" => $data), $http_code, $continue);
 	}
 
+  // Autenticación
+
   protected function _check_token () {
+    // checkea que no esté en las listas de tokens no validos
     if(!(in_array($this->router->method, $this->manualTokenValidation) || in_array($this->router->method,$this->mustTokenValidation))) {
+      // checkea que el token venga en los args del request
       if (!empty($this->_args[$this->config->item('rest_token_name')])) {
+        // lo extrae y asigna
         $this->api_token = $this->_args[$this->config->item('rest_token_name')];
+        // 
         $this->token_validation();
         $this->_check_rol();
       } else {
@@ -84,42 +90,65 @@ class MY_Controller extends REST_Controller {
     }
   }
 
+  // 3. verifica si con el rol del usuario, tiene acceso al metodo
   protected function _check_rol () {
+    // evaluo el token
     if ($this->api_token) {
+      // verifico si hay restricciones y si el metodo está en la lista de restricciones
       if(count($this->restrictions) > 0 && array_key_exists($this->router->method, $this->restrictions)) {
+        // compruebo que el usuario pertenezca al grupo adecuado para darle acceso al método 
+
+        // extraigo el id de usuario
         $user_id = $this->token->get_user_id($this->api_token);
+        // extraigo los grupos asociados al usuario
         $user_groups = $this->user_group->with('grupo')->get_many_by(array('user_id' => $user_id));
         foreach ($user_groups as $key => $group) {
+          // recorro cada grupo del usuario y verifico si se encuentra en groups_allowed, definido en el controlador de la entidad x
           if (in_array($group->grupo->name, $this->restrictions[$this->router->method]["groups_allowed"])) {
-            return true;
+            return true; //concedo acceso
           }
         }
+        // sin acceso
         $this->response(array("message" => $this->lang->line('unauthorized')),self::HTTP_UNAUTHORIZED,self::CODE_BAD);
       }
     } else {
+      // sin acceso
       $this->response(array("message" => $this->lang->line('unauthorized')),self::HTTP_UNAUTHORIZED,self::CODE_BAD);
     }
   }
 
+  // 2. verifica el estado del token
   protected function token_validation() {
+    // con el tocken extraido en _check_token le pasa otro metodo check_token para verificar su estado
     $token_status = $this->token->check_token($this->api_token);
 
+    // mete el valor del estado (FLAG) en un switch
     switch ($token_status) {
       case Token_model::TOKEN_OK :
+        // checkea la configuracion para renovar el tocken 
         if($this->config->item('renew_token_every_call')){
+          // de ser true va a renovarlo cada vez que la petición llegue aqui
           $this->token->renew_token($this->api_token); //Renew token
         }
+        // checkea un valor de la base de datos, que indica si el sistema está activo o en mantenimiento 1-0-null?
         $status = $this->server_configuration->get_id_array(['id' => 1], 'active');
         $roles_can_access = 0;
 
+        // dos restricciones para verificar que el sistema esté activo
         if($status[0] != null) {
           if($status[0] == 1) {
+            // retorna el id de usuario que tiene el tocken  (tockeanble id)
             $user_id = $this->token->get_user_id($this->api_token);
+            // si la consulta ha retornado algo
             if($user_id != null) {
+              // obtiene los grupos a los que pertenece el usuario
               $this->mUserGroups = $this->ion_auth_model->get_users_groups($user_id)->result();
+              // si pertenece a almenos un grupo, contando el tamaño del array
               if(sizeof($this->mUserGroups) > 0) {
+                // verifica alguno de los grupos tiene acceso al sistema en modo 
                 $gruops_can_access = $this->group->get_id_array(['id' => $this->mUserGroups[0]->id], 'maintenance_access');
                 if($gruops_can_access[0] == 0) {
+                  // si el grupo al que pertenece no tiene acceso va detener el flujo con un response
                   $this->response(null, self::HTTP_OK, self::CODE_SHOW_MAITENANCE_MESSAGE);
                 }
               }
@@ -128,6 +157,7 @@ class MY_Controller extends REST_Controller {
         }
         break;
 
+      // retorna responses en caso de una flag de token no valido
       case Token_model::TOKEN_LAPSED :
         $this->response(array("error" => $this->lang->line('lapsed_session')),self::HTTP_OK,self::CODE_SESSION_EXPIRED);
         break;
@@ -142,7 +172,7 @@ class MY_Controller extends REST_Controller {
     }
   }
 
-  // Devuelve todos los registros
+  // Devuelve todos los registros y sus asociados
   public function all_get() {
     $elements = $this->{$this->model}->with_everything()->get_all();
 

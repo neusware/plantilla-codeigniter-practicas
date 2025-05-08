@@ -23,7 +23,7 @@ export default {
       action: null,
       saving: false,
       form: {},
-      // Reglas de validación para el formulario, usando el valor de prop en la confiiguración del modal
+      // Reglas de validación para el formulario, usando el valor de prop en la configuración del modal
       providerRules: {
         nombre: [
           { required: true, message: 'El nombre es obligatorio', trigger: 'blur' },
@@ -42,7 +42,7 @@ export default {
           { pattern: /^[0-9]{9}$/, message: 'El teléfono debe tener 9 dígitos', trigger: 'blur' }
         ]
       },
-      config: { inputs: [] } // config inicialmente con un objeto vacío
+      config: { inputs: [] } // config por defecto con un objeto vacío
     }
   },
   methods: {
@@ -54,24 +54,26 @@ export default {
         // importo configuraciones
         this.config = require('@/modals/config/provider').default
         // fb
-        console.log('Configuración por defecto para el modal cargada')
+        console.log('Configuración provider.js cargada en el modal')
       } catch (error) {
         // fb
         console.error('Error al cargar la configuración por defecto para el modal: ', error)
         // seteo a vacio en caso de excepcion
         this.config = { inputs: [] }
       }
-      // ?
+
+      // aseguro valores por defecto en form
+      console.log('Valores por defecto cargados this.form = config.inputs')
       this.resetForm()
 
       // compruebo si el event.params trae un objeto provider
       if (event.params && event.params.provider) {
+        // fb
+        console.log('Existe un objeto provider en el event.params > action = editar && this.form = event.params.provider')
         // entonces la accón es editar
         this.action = 'Editar'
         // extraigo al form los datos del objeto
         this.form = { ...event.params.provider }
-        // fb
-        console.log('Existe un objeto provider en el event.params > action = editar && this.form = event.params.provider')
       } else {
         // si el event.params no trae provider va ser añadir, el form contiene los datos por defecto en configuración []
         console.log('No existe un objeto provider en el event.params > action = añadir')
@@ -79,9 +81,13 @@ export default {
         this.action = 'Añadir'
       }
     },
+    // resetForm - setea el form con los valores por defecto en config, propiedad del componente
     resetForm() {
+      // si no son null o undefined
       if (this.config && this.config.inputs) {
+        // seteo flag
         this.saving = false
+        // setea el form con los valores por defecto this.config = {this.inputs : []}
         this.form = this.config.inputs.reduce((acc, input) => {
           acc[input.prop] = input.value
           return acc
@@ -91,7 +97,7 @@ export default {
     onSubmit(formName) {
       // fb
       console.log('Método Onsubmit() ejecutándose')
-      // validación
+      // validación ref=providerForm - definido como atributo del elemento form del modal
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // set flag

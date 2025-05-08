@@ -9,12 +9,13 @@ class User extends MY_Controller
   public function __construct()
   {
 
-    $this->dropdownLabel = array("first_name", "last_name");
     // referencia al modelo
     $this->model = "user";
+
+    $this->dropdownLabel = array("first_name", "last_name");
     $this->upload_fields = 'imagen';
 
-    // restricciones para usar metodos, checkea _check_rol en MY_Controller
+    // restricciones para usar metodos, en checkea _check_rol en parent::MY_Controller
     $this->restrictions = array(
       "getFilteredUsers" => array(
         "groups_allowed" => ["admin"]
@@ -40,6 +41,7 @@ class User extends MY_Controller
     $this->response($elements, self::HTTP_OK, self::CODE_OK);
   }
 
+  // ! métodos base sobreescritos pq tiene que manejar la relación con grupos
   // se corresponde con el metodo de mismo nombre userAPI.js -
   public function getFilteredUsers_post()
   {
@@ -123,7 +125,7 @@ class User extends MY_Controller
   {
     // Verifica que viene los datos en clave data y almacena
     $data = $this->post("data") != null ? $this->post("data") : $this->post();
-    // convierte en array asociativo
+    // convierte en array asociativo (true)
     if (is_string($data)) $data = json_decode($data, true);
     else $data = json_decode(json_encode($data), true);
 
@@ -175,7 +177,7 @@ class User extends MY_Controller
   // devuelve el usuario con sus roles
   public function userWithRoles_get($id)
   {
-    //hace la consulta
+    //hace la consulta, directa e indirecta
     $element = $this->user->with('users_groups')->cascade('group')->get($id);
 
     // elimina los pares en clave, correspondiente a datos no interesantes
@@ -265,10 +267,10 @@ class User extends MY_Controller
       }
     }
   }
-  public function phpVersion()
-  {
-      $this->response(['php_version' => PHP_VERSION], self::HTTP_OK, self::CODE_OK);
-  }
+  // public function phpVersion()
+  // {
+  //     $this->response(['php_version' => PHP_VERSION], self::HTTP_OK, self::CODE_OK);
+  // }
 
 
 }

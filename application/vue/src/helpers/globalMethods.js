@@ -109,6 +109,12 @@ export default {
         const texto = text.replace(/\s+/g, ' ').trim()
 
         return texto.toLowerCase().split(' ').map(x => x[0].toUpperCase() + x.slice(1)).join(' ')
+      },
+      // divisa parametrizada
+      formatNumber(value, currency = '') {
+        if (!value) return '0'
+        const formattedNumber = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        return currency ? `${formattedNumber} ${currency}` : formattedNumber
       }
     }
   }

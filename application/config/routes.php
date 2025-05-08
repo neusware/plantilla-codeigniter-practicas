@@ -101,11 +101,11 @@ $route['api/(:any)/file/(:any)/(:any)/(:any)'] = '$1/file/$2/$3/$4';
 
 // paginados
 // $route['api/(:any)/page/(:num)'] = '$1/page/$2'; (page_get /MY_Controller)
-$route['api/provider/getAllProviders/page/(:num)'] = 'provider/getAllProviders/$1';
+// $route['api/provider/getAllProviders/page/(:num)'] = 'provider/getAllProviders/$1';
 
 // registro único
 // $route['api/(:any)/data/(:num)'] = '$1/data/$2'; (data_get /MY_Controller)
-$route['api/provider/getProvider/(:num)'] = 'provider/getProvider/$1';
+// $route['api/provider/getProvider/(:num)'] = 'provider/getProvider/$1';
 
 //filtrado, el que usa el front para read
 $route['api/provider/getFilteredProviders'] = 'provider/getFilteredProviders';
@@ -119,8 +119,13 @@ $route['api/provider/getFilteredProviders'] = 'provider/getFilteredProviders';
 // $route['api/(:any)/update'] = '$1/update'; (update_post() /MY_Controller)
 // $route['api/(:any)/delete'] = '$1/delete'; (delete_post() /MY_Controller)
 
+//products
+$route['api/product/getFilteredProducts'] = 'product/getFilteredProducts';
+
+
 
 // TODO cómo funcionan métodos para archivos asociados (imagen). || Otro delete que haga soft delete, abria que hacer que se recuperen campos con clausula en is_hidden y hacer el metodo para que en vez de delete() ponga el campo a 1 o true, aunque creo que está controlado de alguna forma por el codeigniter, como una especie de SoftDelete_KEY, así que hay que verlo || El insert() y update()/create_post-update_post() con trazabilidad, he agregado el campo a la db y seteado la flag pero error 500. Revisar funcionalidad en interfaz para ver que metodos quedan, creo que los del dropdown.
-//! ojo con el orden
+
+//! ojo con el orden de las rutas
 // Everything that is not API is redirected to vue page
 $route['(.+)'] = 'vue/index';

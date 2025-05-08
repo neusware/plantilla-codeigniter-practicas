@@ -285,6 +285,7 @@ class Auth extends MY_Controller {
 					return show_error($this->lang->line('error_csrf'));
 				}
 
+				// !aqui se ve algo
 				// do we have the right userlevel?
 				if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin()) {
 					$this->ion_auth->deactivate($id);

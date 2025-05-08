@@ -200,6 +200,19 @@ const baseAsyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/products',
+    component: Layout, // ha de estar importado
+    children: [
+      {
+        path: '',
+        component: _import('Products/index'), // ruta correcta
+        hidden: false,
+        name: 'ProductsList',
+        meta: { title: 'Productos', icon: 'product' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

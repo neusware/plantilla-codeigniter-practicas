@@ -21,6 +21,15 @@ class Provider_model extends MY_Model
 
         // propiedad configurada para ejecutar a un método a modo de callback con la clase padre, cuando ejecuta determinados tipos de consulta
         $this->after_get[] = 'cleanFields';
+
+        // relación con productos, matriz asociativa
+        $this->has_many = array(
+            // nombre relación
+            "products" => array(
+                // modelo relacionada, tipo clausula => campo
+                "model" => "product_model", "primary_key" => "id_provider"
+            ));
+
     }
 
     /**
@@ -47,4 +56,8 @@ class Provider_model extends MY_Model
         }
         return $providers;
     }
+
+
+
+
 }

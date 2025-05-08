@@ -2,6 +2,7 @@ export default {
   title: 'proveedor',
   controller: 'provider',
   module_name: 'ProvidersModule',
+  // rules incluidas
   inputs: [
     { type: 'text', prop: 'nombre', label: 'Nombre', rules: [{ required: true, message: 'Este campo es obligatorio', trigger: ['blur', 'change'] }], value: null },
     { type: 'text', prop: 'cif', label: 'CIF', rules: [{ required: true, message: 'Este campo es obligatorio', trigger: ['blur', 'change'] }], value: null },

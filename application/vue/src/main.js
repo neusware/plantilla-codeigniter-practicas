@@ -50,6 +50,12 @@ Router.prototype.push = function push(location, onResolve, onReject) {
 const EventBus = new Vue() // instancia vue
 Vue.prototype.$bus = EventBus // asignación a vue prototype bus
 
+// lo meto en globalMethods
+// Vue.filter('formatNumber', function(value) {
+//   if (!value) return '0'
+//   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+// })
+
 Vue.config.productionTip = false
 
 new Vue({
