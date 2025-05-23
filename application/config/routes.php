@@ -95,7 +95,9 @@ $route['api/(:any)/data/(:num)'] = '$1/data/$2';
 $route['api/(:any)/uploadFile'] = '$1/uploadFile';
 $route['api/(:any)/file/(:any)/(:any)/(:any)'] = '$1/file/$2/$3/$4';
 
-// -------------------------rutas providers
+// -------------------------
+
+//providers
 //select *
 // $route['api/(:any)/all'] = '$1/all'; (all_get /MY_Controller)
 
@@ -121,11 +123,13 @@ $route['api/provider/getFilteredProviders'] = 'provider/getFilteredProviders';
 
 //products
 $route['api/product/getFilteredProducts'] = 'product/getFilteredProducts';
+//clients
+$route['api/client/getFilteredClients'] = 'client/getFilteredClients';
+//Invoices
+$route['api/invoice/getFilteredInvoices'] = 'invoice/getFilteredInvoices';
 
 
 
-// TODO cómo funcionan métodos para archivos asociados (imagen). || Otro delete que haga soft delete, abria que hacer que se recuperen campos con clausula en is_hidden y hacer el metodo para que en vez de delete() ponga el campo a 1 o true, aunque creo que está controlado de alguna forma por el codeigniter, como una especie de SoftDelete_KEY, así que hay que verlo || El insert() y update()/create_post-update_post() con trazabilidad, he agregado el campo a la db y seteado la flag pero error 500. Revisar funcionalidad en interfaz para ver que metodos quedan, creo que los del dropdown.
-
-//! ojo con el orden de las rutas
+// ojo con el orden de las rutas
 // Everything that is not API is redirected to vue page
 $route['(.+)'] = 'vue/index';

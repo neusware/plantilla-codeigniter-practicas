@@ -55,6 +55,30 @@ $lang['success_crear_product'] = "Producto creado correctamente.";
 $lang['error_actualizar_product'] = "No se ha podido actualizar el producto.";
 $lang['success_actualizar_product'] = "Producto actualizado correctamente.";
 
+// Client
+$lang['error_eliminar_client'] = "No se ha podido eliminar el cliente.";
+$lang['success_eliminar_client'] = "Cliente eliminado correctamente.";
+$lang['error_crear_client'] = "No se ha podido crear el cliente.";
+$lang['success_crear_client'] = "Cliente creado correctamente.";
+$lang['error_actualizar_client'] = "No se ha podido actualizar el cliente.";
+$lang['success_actualizar_client'] = "Cliente actualizado correctamente.";
+
+// Invoice
+$lang['error_eliminar_invoice'] = "No se ha podido eliminar la invoice.";
+$lang['success_eliminar_invoice'] = "Invoice eliminada correctamente.";
+$lang['error_crear_invoice'] = "No se ha podido crear la invoice.";
+$lang['success_crear_invoice'] = "Invoice creada correctamente.";
+$lang['error_actualizar_invoice'] = "No se ha podido actualizar la invoice.";
+$lang['success_actualizar_invoice'] = "Invoice actualizada correctamente.";
+
+// Invoice_line
+$lang['error_eliminar_invoice_line'] = "No se ha podido eliminar la invoice_line.";
+$lang['success_eliminar_invoice_line'] = "Invoice_line eliminada correctamente.";
+$lang['error_crear_invoice_line'] = "No se ha podido crear la invoice_line.";
+$lang['success_crear_invoice_line'] = "Invoice_line creada correctamente.";
+$lang['error_actualizar_invoice_line'] = "No se ha podido actualizar la invoice_line.";
+$lang['success_actualizar_invoice_line'] = "Invoice_line actualizada correctamente.";
+
 //---------------------------------------------------------------
 
 // checkIn

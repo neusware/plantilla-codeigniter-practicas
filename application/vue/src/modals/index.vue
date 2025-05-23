@@ -5,6 +5,7 @@
     modal-usuario
     modal-provider
     modal-product
+    modal-client
 </template>
 
 <script>
@@ -13,6 +14,7 @@
   import ModalUsuario from './usuario.vue'
   import ModalProvider from './provider.vue'
   import ModalProduct from './product.vue'
+  import ModalClient from './client.vue'
 
   export default {
     name: 'GlobalModals',
@@ -21,7 +23,8 @@
       ModalRecuperarPass,
       ModalUsuario,
       ModalProvider,
-      ModalProduct
+      ModalProduct,
+      ModalClient
     }
   }
 </script>

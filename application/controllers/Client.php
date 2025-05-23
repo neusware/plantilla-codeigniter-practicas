@@ -1,21 +1,23 @@
 <?php
 
-
-class Product extends MY_Controller{
+class Client extends MY_Controller {
 
     public function __construct()
     {
         // campos globales
-        $this->model = "product";
+        
+        // apunto modelo
+        $this->model="client";
 
-        // campos dropdow
-        // $this->dropdownLabel = array("id", "id_proveedor");
+        // configuro language_tag
+        $this->language_tag = "client";
 
-        // archivos asociados
+        // Configurar los campos para el dropdown - select
+        $this->dropdownLabel = ["nombre", "apellido"]; // label/clave al front
+        $this->dropDownValue = "id";    // value  al back
+
+        // configuro archivos asociados
         $this->upload_fields = "imagen";
-
-        // configuro language tag
-        $this->language_tag = "product";
 
         // restricciones _check_rol()
         // $this->restrictions = array(
@@ -24,20 +26,12 @@ class Product extends MY_Controller{
         //     )
         // );
 
-        // Configurar los campos para el dropdown - select
-        $this->dropdownLabel = "nombre"; // label/clave al front
-        $this->dropDownValue = "id";    // value  al back
-
         parent::__construct();
 
     }
 
 
-    // ------------------ métodos personalizados ------------------------
-
-
-
-    public function getFilteredProducts_post(){
+    public function getFilteredClients_post(){
 
         // extraigo datos del request, como es un get (filtro y paginación)
 
@@ -59,13 +53,13 @@ class Product extends MY_Controller{
         ];
 
         // consulta base, registros producto con los registros proovedor asociados
-        $query = $this->product->with('provider');
+        $query = $this->client;
 
         // todo caso de uso filtrar por campos del registro provider asociado, con un join?
         // evaluo filtro para aplicar
         if ($filtro!== null) {
             // or_like_where(campos, filtros, clausula)
-            $query = $query->or_like_where([ 'nombre', 'codigo', 'precio', 'stock'], $filtro_exploded, $separation);
+            $query = $query->or_like_where([ 'email', 'nombre', 'apellido', 'direccion'], $filtro_exploded, $separation);
         }
 
         // pagino y filtro adicional
@@ -76,12 +70,25 @@ class Product extends MY_Controller{
             $this->response($datos, self::HTTP_OK, self::CODE_OK);
         }else{
             $this->response([
-                'error' => 'No se encontraron productos',
+                'error' => 'No se encontraron clientes',
                 'filter' => $filtro,
                 'page' => $page
             ], self::HTTP_OK, self::CODE_BAD);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

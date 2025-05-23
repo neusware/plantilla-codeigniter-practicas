@@ -35,11 +35,19 @@ class Product_model extends MY_Model {
         // metodo callback after_get
         $this->after_get[] = 'cleanFields';
 
-        $this->belongs_to = array(
-            "provider" => array(
-                "model" => "provider_model",
-                "primary_key" => "id_provider"
+        // relación fk id_product en invoice_lines
+        $this->has_many = array(
+            "invoice_lines" => array(
+                "model" => "invoice_line_model",
+                "primary_key" => "id_product"
             ));
+
+        // relación fk id_provider de proveedores
+        $this->belongs_to = array(
+        "provider" => array(
+            "model" => "provider_model",
+            "primary_key" => "id_provider"
+        ));
 
 
     }
@@ -63,6 +71,8 @@ class Product_model extends MY_Model {
             // limpiando - clase.metodo.param
             $this->cleanFields($product);
         }
+
+        return $products;
     }
 
 }

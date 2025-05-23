@@ -83,7 +83,7 @@ export default {
           console.error('Error al obtener los proveedores:', error)
         })
 
-      // compruebo si el event.params trae un objeto product
+      //! evalúo si el event.params trae un objeto product
       if (event.params && event.params.product) {
         // fb
         console.log('Existe un objeto product en el event.params > action = editar && this.form = event.params.product')

@@ -213,6 +213,41 @@ const baseAsyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/clients',
+    component: Layout, // ha de estar importado
+    children: [
+      {
+        path: '',
+        component: _import('Clients/index'), // ruta correcta
+        hidden: false,
+        name: 'ClientsList',
+        meta: { title: 'Clientes', icon: 'international' }
+      }
+    ]
+  },
+  {
+    path: '/invoices',
+    component: Layout, // ha de estar importado
+    children: [
+      {
+        path: '',
+        component: _import('Invoices/index'), // ruta correcta
+        hidden: false,
+        name: 'InvoicesList',
+        meta: { title: 'Facturas', icon: 'chart' }
+      },
+      {
+        // al path se le agrega un parametro local..../usuario/perfil?id
+        path: 'invoice/:id_invoice',
+        component: _import('Invoices/invoice_template'),
+        // hidden - no se puede navegar directamente desde la topbar, se accede dado un evento
+        hidden: true,
+        name: 'InvoicesTemplate',
+        meta: { title: 'Plantilla de factura' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -159,12 +159,25 @@ class MY_Model extends Base_Model
 		return $this;
 	}
 
-	//adapted dropdown for vue element
+	// adapted dropdown for vue element.
+	/**
+	 * * Adapted dropdown for vue element
+	 *
+	 * Elabora una consulta ordenada por el valor de dropdown_keys
+	 *  */
 	public function dropdownVue($dropdown_keys, $dropdown_value, $separator = " - ", $get_many_by = array())
 	{
+		// ! ir depurando
+		// var_dump($dropdown_keys);
+		// exit();
+
+		// evalúo si el parámetro es un array, si no lo es lo convierto
 		$dropdown_keys = is_array($dropdown_keys) ? $dropdown_keys : array($dropdown_keys);
 
+		// consulto con order_by + get_man_by - array()?
 		$elements = $this->order_by($dropdown_keys[0])->get_many_by($get_many_by);
+
+		// inicializo array vacío en valriable
 		$dropdown = array();
 		foreach ($elements as $element) {
 			$element->label = $element->{$dropdown_keys[0]};
