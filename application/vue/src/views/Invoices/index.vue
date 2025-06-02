@@ -4,14 +4,14 @@
     add-new-thing(
       :disabled='deleting',
       v-if='$helpers.isAdmin()',
-      text='Añadir Factura',
+      text='Crear una factura',
       @click='handleCreate()'
     )
 
   .filters-box
     custom-input.filter-item(
       v-model='filters.buscador',
-      placeholder='Buscar Factura...',
+      placeholder='Buscar factura...',
       @keyup.enter.native='fetchData(1)'
     )
     custom-button.add-item(:disabled='deleting', @click.native='fetchData(1)') Buscar
@@ -39,9 +39,18 @@
         span {{scope.row.clients.nombre}} {{ scope.row.clients.apellido}}
     el-table-column(label='Código', prop='codigo', min-width='120px', align='center')
     el-table-column(label='Fecha', prop='fecha', min-width='190px', align='center')
-    el-table-column(label='Total', prop='total', min-width='120px', align='center')
+    el-table-column(label='Total facturado', prop='total', min-width='170px', align='center')
+      template(slot-scope='scope')
+            span {{ $helpers.formatNumber(scope.row.total, "€") }}
     el-table-column(label='Acciones', min-width='110px', align='center')
       template(slot-scope='scope')
+        el-tooltip(effect='light',
+          content='Ver Factura',
+          placement='top')
+          svg-icon.control-icon.cus(
+            icon-class='Eye',
+            @click.prevent.native.stop='handleRead(scope.row)'
+          )
         el-tooltip(effect='light',
           content='Editar Factura',
           placement='top')
@@ -73,6 +82,7 @@
 import InvoiceApi from '@/api/InvoiceApi'
 import RouteFilters from '@/mixins/RouteFilters'
 
+// todo meter algo de feddback para user enterarse q se esta updateando, revisar validaciones en la back para las lineas de facturación, que no las hay
 export default {
   name: 'invoice',
   mixins: [RouteFilters],
@@ -100,7 +110,8 @@ export default {
       // propiedades de la instancia vue
       // flags
       loading: true,
-      deleting: true,
+      deleting: false,
+      action: null,
       // propiedad que almacena los datos
       invoiceList: [],
       pagination: {
@@ -141,14 +152,19 @@ export default {
           this.loading = false
         })
     },
+    handleRead(invoice) {
+      this.action = 'Ver' // Modificado de 'Leer' a 'Ver'
+      this.encodeFilters('InvoicesTemplate', { id_invoice: invoice.id, action: this.action })
+    },
     // update de datos a partir de event en tooltip, recibe por parámtro el client(scope.row)
     handleEdit(invoice) {
-      this.encodeFilters('InvoicesTemplate', {id_invoice: invoice.id})
+      this.action = 'Editar' // Modificado de 'Actualizar' a 'Editar'
+      this.encodeFilters('InvoicesTemplate', { id_invoice: invoice.id, action: this.action })
     },
     handleCreate(invoice) {
-      this.encodeFilters('InvoicesTemplate', {id_invoice: -1})
+      this.action = 'Crear'
+      this.encodeFilters('InvoicesTemplate', { id_invoice: -1, action: this.action })
     },
-
     // delete de datos a partir del tooltip, recibe por parámtro el client (scope.row), sin embargo, se codifica a piñon el modal y la lógica
     handleDelete(invoice) {
       // fb

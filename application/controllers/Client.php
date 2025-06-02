@@ -5,7 +5,7 @@ class Client extends MY_Controller {
     public function __construct()
     {
         // campos globales
-        
+
         // apunto modelo
         $this->model="client";
 

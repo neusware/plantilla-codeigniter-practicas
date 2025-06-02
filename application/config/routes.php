@@ -127,6 +127,8 @@ $route['api/product/getFilteredProducts'] = 'product/getFilteredProducts';
 $route['api/client/getFilteredClients'] = 'client/getFilteredClients';
 //Invoices
 $route['api/invoice/getFilteredInvoices'] = 'invoice/getFilteredInvoices';
+//Invoices_lines
+$route['api/invoice_line/handler_invoice_lines'] = 'invoice_line/handler_invoice_lines';
 
 
 

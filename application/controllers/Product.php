@@ -1,7 +1,8 @@
 <?php
 
 
-class Product extends MY_Controller{
+class Product extends MY_Controller
+{
 
     public function __construct()
     {
@@ -29,7 +30,6 @@ class Product extends MY_Controller{
         $this->dropDownValue = "id";    // value  al back
 
         parent::__construct();
-
     }
 
 
@@ -37,7 +37,8 @@ class Product extends MY_Controller{
 
 
 
-    public function getFilteredProducts_post(){
+    public function getFilteredProducts_post()
+    {
 
         // extraigo datos del request, como es un get (filtro y paginación)
 
@@ -63,18 +64,18 @@ class Product extends MY_Controller{
 
         // todo caso de uso filtrar por campos del registro provider asociado, con un join?
         // evaluo filtro para aplicar
-        if ($filtro!== null) {
+        if ($filtro !== null) {
             // or_like_where(campos, filtros, clausula)
-            $query = $query->or_like_where([ 'nombre', 'codigo', 'precio', 'stock'], $filtro_exploded, $separation);
+            $query = $query->or_like_where(['nombre', 'codigo', 'precio', 'stock'], $filtro_exploded, $separation);
         }
 
         // pagino y filtro adicional
         $datos = $query->paginate($page, $where,  10);
 
         // evaluo y response
-        if(!empty($datos['data'])){
+        if (!empty($datos['data'])) {
             $this->response($datos, self::HTTP_OK, self::CODE_OK);
-        }else{
+        } else {
             $this->response([
                 'error' => 'No se encontraron productos',
                 'filter' => $filtro,
@@ -82,7 +83,4 @@ class Product extends MY_Controller{
             ], self::HTTP_OK, self::CODE_BAD);
         }
     }
-
-
-
 }

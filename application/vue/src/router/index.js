@@ -232,19 +232,19 @@ const baseAsyncRouterMap = [
     children: [
       {
         path: '',
-        component: _import('Invoices/index'), // ruta correcta
+        component: _import('Invoices/index'), // path correcto
         hidden: false,
         name: 'InvoicesList',
         meta: { title: 'Facturas', icon: 'chart' }
       },
       {
-        // al path se le agrega un parametro local..../usuario/perfil?id
+        // al path se le agrega un parametro local
         path: 'invoice/:id_invoice',
         component: _import('Invoices/invoice_template'),
         // hidden - no se puede navegar directamente desde la topbar, se accede dado un evento
         hidden: true,
         name: 'InvoicesTemplate',
-        meta: { title: 'Plantilla de factura' }
+        meta: { title: 'Plantilla de facturación' }
       }
     ]
   },

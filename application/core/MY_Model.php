@@ -159,7 +159,6 @@ class MY_Model extends Base_Model
 		return $this;
 	}
 
-	// adapted dropdown for vue element.
 	/**
 	 * * Adapted dropdown for vue element
 	 *

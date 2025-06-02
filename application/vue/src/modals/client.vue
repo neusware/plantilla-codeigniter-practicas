@@ -41,7 +41,7 @@ export default {
           { pattern: /^[A-ZÁÉÍÓÚÑa-záéíóúñ\s]{1,100}$/, message: 'El apellido debe contener sólo letras y tener un máximo de 100 caracteres', trigger: ['blur', 'change'] }
         ],
         direccion: [
-           { required: true, message: 'Este campo es obligatorio', trigger: ['blur', 'change'] },
+          { required: true, message: 'Este campo es obligatorio', trigger: ['blur', 'change'] },
           { pattern: /^[A-ZÁÉÍÓÚÑa-záéíóúñ\s]{1,500}$/, message: 'La dirección debe contener sólo letras y tener un máximo de 500 caracteres', trigger: ['blur', 'change'] }
         ]
       },
@@ -68,7 +68,6 @@ export default {
       // aseguro valores por defecto en form
       console.log('Valores por defecto cargados this.form = config.inputs')
       this.resetForm()
-
 
       //! evalúo si el event.params trae un objeto client
       if (event.params && event.params.client) {
