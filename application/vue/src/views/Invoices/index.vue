@@ -34,7 +34,7 @@
     :element-loading-text='!deleting ? "Cargando..." : "Borrando..."'
   )
     //- el-table-column(label='Id', prop='id', min-width='190px')
-    el-table-column(label='Cliente', prop='clients', min-width='190px', align='center')
+    el-table-column(label='Cliente', prop='clients', min-width='195px', align='center')
       template(slot-scope="scope")
         span {{scope.row.clients.nombre}} {{ scope.row.clients.apellido}}
     el-table-column(label='Código', prop='codigo', min-width='120px', align='center')

@@ -92,7 +92,7 @@ class Invoice_line extends MY_Controller
         // recorro las lineas del request
         foreach ($invoice_lines_request as $line) {
 
-            // todo tiene que haber alguna forma de hacer esto de otra manera, manejando si id viene en null o no
+            // todo tiene que haber alguna forma de hacer esto de otra manera, manejando si id viene en null o no, editando solo el id_invoice o mirando si el id es null q es create
             // modelo una estructura tipo registro con los datos
             $data = [
             'id_product'      => $line['id_product'] ?? null,
