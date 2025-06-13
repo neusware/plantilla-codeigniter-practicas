@@ -9,7 +9,7 @@
   .container(v-loading='loading', element-loading-text='Cargando datos...')
     .container
       h3 Datos del cliente
-      el-form.flex-form-with-rows(ref='invoice_client_form', :model='invoice')
+      el-form.flex-form-with-rows(ref='invoice_form', :model='invoice', :rules='formRules')
         .form-row
           .form-flex-item-1
             custom-select(
@@ -38,13 +38,10 @@
       <hr>
     .container
       h3 Líneas de facturación
-      el-form.flex-form-with-rows(
-        ref='invoice_lines_form',
-        :model='invoiceForm'
-      )
+      el-form.flex-form-with-rows( ref='invoice_lines_form', :model='il_wrapper', :rules='formRules')
         .form-row(
-          v-for='(line, index) in invoiceForm.invoice_lines_w',
-          :key='line.id'
+          v-for='(line, index) in il_wrapper.invoice_lines_w',
+          :key='index'
         )
           .form-flex-item-1
             custom-select(
@@ -77,7 +74,6 @@
               :value='$helpers.formatNumber(line.descuento, "%")',
               label='Descuento',
               placeholder='Descuento',
-              :prop='"invoice_lines_w[" + index + "].descuento"',
               :readonly='action === "Ver"'
             )
             custom-input(
@@ -113,7 +109,7 @@
     <hr>
     .container
       h3 Pie de factura
-      el-form.flex-form-with-rows(ref='invoice_form', :model='invoice')
+      el-form.flex-form-with-rows(ref='invoice_form', :model='invoice', :rules='formRules')
         .form-row
           custom-input(
             v-model='invoice.codigo',
@@ -167,8 +163,8 @@
             h3 invoice
             pre {{ invoice }}
           .form-flex-item-1
-            h3 invoiceForm
-            pre {{ invoiceForm }}
+            h3 il_wrapper
+            pre {{ il_wrapper }}
         .form-row
           .form-flex-item-1
             h3 selectedClient
@@ -213,9 +209,9 @@
         this.action === 'Ver'
       ) {
         /*
-                      1 - Leo y asigno
-                      2 - Bindeo las partes que me interesan del template a la nueva estructura de datos invoice - invoice_lines
-                      */
+        1 - Leo y asigno
+        2 - Bindeo las partes que me interesan del template a la nueva estructura de datos invoice - invoice_lines
+        */
 
         // lectura y asignación de datos al modelo
         this.fetchData()
@@ -234,7 +230,7 @@
           is_hidden: 0
         }
 
-        this.invoiceForm.invoice_lines_w = [
+        this.il_wrapper.invoice_lines_w = [
           // inicializo array con invoice_line tipo
           {
             id: null,
@@ -254,6 +250,7 @@
 
     // -------------------------------------------------------------------------------data
     data() {
+      // ------------------------------------propiedades
       return {
         // flags
         loading: true,
@@ -277,7 +274,7 @@
         },
 
         // wrappeo en {} por elemento el-form
-        invoiceForm: {
+        il_wrapper: {
           // inicializo el array que almacenará las estructuras tipo para registros invoice_lines (casos create, update y delete)
           invoice_lines_w: []
         },
@@ -289,7 +286,24 @@
         selectedClient: {},
 
         // lectura de productos existentes, formato dropdown para select
-        productsList: []
+        productsList: [],
+        // ------------------------rules
+        formRules: {
+          id_client: [{ required: true, message: 'El cliente es obligatorio', trigger: 'change' }],
+          codigo: [{ required: true, message: 'El código de factura es obligatorio', trigger: ['blur', 'change'] }],
+          fecha: [{ required: true, message: 'La fecha es obligatoria', trigger: 'change' }],
+          // Reglas para los campos dentro de cada línea de factura
+          // Estas se aplicarán dinámicamente usando :prop en el template
+          'invoice_lines_w.unidades': [
+            { required: true, message: 'Las unidades son obligatorias', trigger: ['blur', 'change'] }
+          ],
+          'invoice_lines_w.descuento': [
+            { required: true, message: 'El descuento es obligatorio', trigger: ['blur', 'change'] }
+          ],
+          'invoice_lines_w.id_product': [
+            { required: true, message: 'El producto es obligatorio', trigger: 'change' }
+          ]
+        }
       }
     },
     // -------------------------------------------------------------------------------------methods
@@ -316,7 +330,7 @@
             }
 
             // registro invoice_lines_tipo con copia de los valores
-            this.invoiceForm.invoice_lines_w =
+            this.il_wrapper.invoice_lines_w =
               this.invoiceFetched['invoice_lines']
 
             // codifica la ruta en la barra de navegacion
@@ -355,7 +369,7 @@
         // this.updatePrecioUnitario(index)
 
         // saco la linea
-        const line = this.invoiceForm.invoice_lines_w[index]
+        const line = this.il_wrapper.invoice_lines_w[index]
         // evalúo por si falla
         if (!line || !line.id_product) {
           line.precio_unitario = null
@@ -370,20 +384,20 @@
 
         // evalúo
         if (selectedProduct) {
-          //! igualo el precio
+          //! asignación del precio
           line.precio_unitario = selectedProduct.precio
         } else {
           line.precio_unitario = null
         }
 
-        // seteo unidades y descuento de la línea_factu a 0
+        // seteo unidades y descuento de la línea_factu a 0, caso nuevo producto
         line.unidades = 0
         line.descuento = 0
       },
 
       addInvoiceLine() {
         // pusheo nuevo objeto invoice_line al array
-        this.invoiceForm.invoice_lines_w.push({
+        this.il_wrapper.invoice_lines_w.push({
           id: null,
           id_invoice: this.invoice.id || null,
           id_product: null,
@@ -397,19 +411,19 @@
       // update de datos a partir de event en tooltip, recibe por parámtro el client(scope.row)
       deleteInvoiceLine(index) {
         // recibo por parámetro la posición del objeto en el array, lo elimino
-        this.invoiceForm.invoice_lines_w.splice(index, 1)
+        this.il_wrapper.invoice_lines_w.splice(index, 1)
         // recalculo en watcher q salta con splice
       },
 
       calcularTotal() {
         console.log('calcularTotal()...')
         // recorro las lineas del modelo
-        this.invoiceForm.invoice_lines_w.forEach((line) => {
+        this.il_wrapper.invoice_lines_w.forEach((line) => {
           // calculo el subtotal de cada linea
           line.subtotal = this.calcularSubtotal(line)
         })
         // calculo y asigno el total en sumatorio, con operador unario (casting  x valor retorna toFixed a tipo numerico), reduce recorriendo con param sum como acumulador y valor 0 por defecto, tb controlando si line.subtotal no es un numero, y formateado con dos decimales
-        this.invoice.total = +this.invoiceForm.invoice_lines_w
+        this.invoice.total = +this.il_wrapper.invoice_lines_w
           .reduce((sum, line) => sum + (Number(line.subtotal) || 0), 0)
           .toFixed(2)
       },
@@ -431,6 +445,7 @@
       },
 
       onSubmit() {
+        // !update
         if (this.action === 'Editar') {
           this.saving = true
 
@@ -440,10 +455,10 @@
               console.log('Invoice actualizada')
               console.log(
                 'Enviando datos invoice lines:',
-                this.invoiceForm.invoice_lines_w
+                this.il_wrapper.invoice_lines_w
               )
               return InvoiceLineApi.handlerInvoiceLines(
-                this.invoiceForm.invoice_lines_w,
+                this.il_wrapper.invoice_lines_w,
                 this.invoice.id
               )
             })
@@ -461,27 +476,31 @@
             .finally(() => {
               this.saving = false
             })
+
+        //!create
         } else if (this.action === 'Crear') {
           this.saving = true
           console.log('Enviando datos invoice:', this.invoice)
 
-          // BaseApiCalls
+          // creo la invoice - baseApiCalls
           InvoiceApi.create(this.invoice)
             .then((response) => {
               console.log('Invoice creada')
-              // recojo el id de la factura
+              // recojo el id de la factura de la response
               const invoiceId = response.data.id
+              // fb
               console.log('Enviando datos de invoice_lines:', {
-                lines: this.invoiceForm.invoice_lines_w,
+                lines: this.il_wrapper.invoice_lines_w,
                 invoiceId
               })
-              // lo uso como parámetro
+              // creo las líneas de facturación @params(líneas+invoice_id)
               return InvoiceLineApi.handlerInvoiceLines(
-                this.invoiceForm.invoice_lines_w,
+                this.il_wrapper.invoice_lines_w,
                 invoiceId
               )
             })
             .then(() => {
+              // fb
               console.log('Invoice lines creadas')
               console.log('Create completado')
               // espero por toast y redirigo
@@ -492,6 +511,7 @@
             .catch((error) => {
               console.error('Error al crear factura:', error)
             })
+            // evito freeze
             .finally(() => {
               this.saving = false
             })
@@ -507,7 +527,7 @@
         if (prev_route.name !== new_route.name) this.fetchData()
       },
 
-      'invoiceForm.invoice_lines_w': {
+      'il_wrapper.invoice_lines_w': {
         handler() {
           this.calcularTotal()
         },

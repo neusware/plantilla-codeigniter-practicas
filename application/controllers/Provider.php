@@ -202,7 +202,7 @@ class Provider extends MY_Controller
         // validacion, he de excluir el registro actual
         // if(isset($data["id"]) && isset($data["cif"])){
 
-        // sete el conjunto de datos a validar
+        // seteo el conjunto de datos a validar
         $this->form_validation->set_data($data);
 
         // id required
